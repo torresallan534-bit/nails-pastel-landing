@@ -120,7 +120,17 @@ export default function Footer() {
             </li>
             <li className="flex items-start gap-2">
               <Mail className="w-4 h-4 text-brand-dark shrink-0 mt-0.5" />
-              <span>Google Calendar / Email: {siteConfig.notificationEmail}</span>
+              <span>
+                Citas Google Calendar:{' '}
+                <a
+                  href={siteConfig.googleCalendarScheduleUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-brand-dark hover:underline"
+                >
+                  Abrir calendario oficial
+                </a>
+              </span>
             </li>
           </ul>
 

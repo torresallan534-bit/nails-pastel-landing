@@ -9,6 +9,7 @@ import {
   ArrowRight,
   Star,
   CheckCircle2,
+  CalendarCheck2,
 } from 'lucide-react';
 
 export default function Hero() {
@@ -58,10 +59,13 @@ export default function Hero() {
             </a>
 
             <a
-              href="#servicios"
-              className="w-full sm:w-auto min-h-[52px] px-7 py-3.5 rounded-2xl bg-white hover:bg-canvas border border-canvas-border hover:border-pastel-purple text-brand-dark font-bold text-sm tracking-wide shadow-xs flex items-center justify-center gap-2 transition-all"
+              href="https://calendar.app.google/4FftVZiHKhicYrPdA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto min-h-[52px] px-6 py-3.5 rounded-2xl bg-white hover:bg-canvas border border-canvas-border hover:border-pastel-purple text-brand-dark font-bold text-sm tracking-wide shadow-xs flex items-center justify-center gap-2 transition-all"
             >
-              <span>Explorar servicios y tarifas</span>
+              <CalendarCheck2 className="w-4 h-4 text-pastel-pinkDark" />
+              <span>Google Calendar Oficial</span>
             </a>
           </div>
 

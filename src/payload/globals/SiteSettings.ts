@@ -46,7 +46,7 @@ export const SiteSettings: GlobalConfig = {
             {
               name: 'googleCalendarScheduleUrl',
               type: 'text',
-              defaultValue: 'https://calendar.google.com/calendar/u/0/appointments/schedules',
+              defaultValue: 'https://calendar.app.google/4FftVZiHKhicYrPdA',
               label: 'Enlace a Página de Citas de Google Calendar (Appointment Schedule)',
               admin: {
                 description: 'Link público generado desde calendar.google.com para citas nativas gratuitas.',

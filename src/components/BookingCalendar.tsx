@@ -802,6 +802,33 @@ export default function BookingCalendar({
             </div>
           </div>
 
+          {/* Quick Direct Link CTA Bar */}
+          <div className="bg-white rounded-3xl p-5 border border-canvas-border shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3 text-left">
+              <div className="w-10 h-10 rounded-xl bg-pastel-pink/30 flex items-center justify-center shrink-0">
+                <CalendarCheck2 className="w-5 h-5 text-brand-dark" />
+              </div>
+              <div>
+                <span className="text-xs font-bold text-brand-dark block">
+                  Página nativa de Google Calendar de Nelmarian
+                </span>
+                <span className="text-[11px] text-brand-muted">
+                  Disponible para reservar turnos en vivo y sincronizar con tu cuenta
+                </span>
+              </div>
+            </div>
+
+            <a
+              href={siteConfig.googleCalendarScheduleUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-pastel-pink hover:bg-pastel-pinkHover text-brand-dark font-extrabold text-xs tracking-wide shadow-xs flex items-center justify-center gap-2 transition-all shrink-0"
+            >
+              <span>Abrir página oficial de citas</span>
+              <ExternalLink className="w-4 h-4 text-brand-dark" />
+            </a>
+          </div>
+
           {/* Embedded Google Calendar Appointment Schedule Frame */}
           <div className="relative rounded-4xl overflow-hidden bg-white shadow-float border border-canvas-border min-h-[680px]">
             <iframe
