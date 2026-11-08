@@ -1,4 +1,6 @@
 declare module 'payload' {
+  export type ServerFunctionClient = (args: any) => Promise<any>;
+
   export interface Field {
     name?: string;
     type: string;
@@ -73,14 +75,20 @@ declare module 'payload' {
     };
     db?: any;
     sharp?: any;
+    plugins?: any[];
     [key: string]: any;
   }
 
   export function buildConfig(config: Config): Config;
 }
 
+declare module 'sharp' {
+  const sharp: any;
+  export default sharp;
+}
+
 declare module '@payloadcms/db-mongodb' {
-  export function mongooseAdapter(args: { url: string; [key: string]: any }): any;
+  export function mongooseAdapter(args: { url: string; connectOptions?: any; [key: string]: any }): any;
 }
 
 declare module '@payloadcms/richtext-lexical' {
@@ -100,7 +108,8 @@ declare module '@payloadcms/next/views' {
 
 declare module '@payloadcms/next/layouts' {
   import React from 'react';
-  export const RootLayout: React.FC<{ config: any; children: React.ReactNode }>;
+  export const RootLayout: React.FC<{ config: any; importMap?: any; serverFunction?: any; children: React.ReactNode }>;
+  export function handleServerFunctions(args: any): Promise<any>;
 }
 
 declare module '@payloadcms/next/routes' {
@@ -108,10 +117,11 @@ declare module '@payloadcms/next/routes' {
   export function REST_POST(configPromise: any): (req: Request, ...rest: any[]) => Promise<Response>;
   export function REST_DELETE(configPromise: any): (req: Request, ...rest: any[]) => Promise<Response>;
   export function REST_PATCH(configPromise: any): (req: Request, ...rest: any[]) => Promise<Response>;
+  export function REST_PUT(configPromise: any): (req: Request, ...rest: any[]) => Promise<Response>;
   export function REST_OPTIONS(configPromise: any): (req: Request, ...rest: any[]) => Promise<Response>;
 }
 
 declare module '@payload-config' {
-  const configPromise: Promise<any>;
+  const configPromise: any;
   export default configPromise;
 }

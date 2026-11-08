@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-canvas: #fcf5f2;
+  --accent-purple: #f7bbfd;
+  --accent-soft: #f0cdef;
+  --accent-pink: #ffa0d3;
+  --text-main: #010101;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  font-family: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fcf5f2;
+}
+::-webkit-scrollbar-thumb {
+  background: #f0cdef;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ffa0d3;
+}
+
+/* Luxury card blur */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(240, 205, 239, 0.45);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(247, 187, 253, 0.4);
+}
+
+/* Smooth gradients */
+.gradient-pastel {
+  background: linear-gradient(135deg, #f7bbfd 0%, #f0cdef 50%, #ffa0d3 100%);
+}
+
+.gradient-mesh {
+  background: 
+    radial-gradient(at 0% 0%, rgba(247, 187, 253, 0.35) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(255, 160, 211, 0.3) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(240, 205, 239, 0.4) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(252, 245, 242, 1) 0px, transparent 50%);
+}
+
+/* Animation utilities */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+}

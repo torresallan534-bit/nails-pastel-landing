@@ -1,25 +1,25 @@
-import type { Metadata, Viewport } from 'next';
-import { Plus_Jakarta_Sans, Inter } from 'next/font/google';
-import './globals.css';
+import type { Metadata, Viewport } from 'next'
+import { Plus_Jakarta_Sans, Inter } from 'next/font/google'
+import './globals.css'
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-jakarta',
   display: 'swap',
-});
+})
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
-});
+})
 
 export const viewport: Viewport = {
   themeColor: '#ffa0d3',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-};
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nailspastel.com'),
@@ -57,12 +57,12 @@ export const metadata: Metadata = {
     icon: '/images/logo/logo.png',
     apple: '/images/logo/logo.png',
   },
-};
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="es" className={`${jakarta.variable} ${inter.variable} scroll-smooth`}>
@@ -70,5 +70,5 @@ export default function RootLayout({
         {children}
       </body>
     </html>
-  );
+  )
 }
