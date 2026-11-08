@@ -8,6 +8,7 @@ import BentoGallery from '@/components/BentoGallery';
 import BookingCalendar from '@/components/BookingCalendar';
 import DepositPolicies from '@/components/DepositPolicies';
 import Footer from '@/components/Footer';
+import MobileFloatingBar from '@/components/MobileFloatingBar';
 import {
   ThemeBrandingData,
   HeroContentData,
@@ -57,7 +58,7 @@ export default function LandingView({
         }
       `}</style>
 
-      <main className="min-h-screen bg-canvas text-brand-dark flex flex-col selection:bg-pastel-pink selection:text-brand-dark">
+      <main className="min-h-screen bg-canvas text-brand-dark flex flex-col selection:bg-pastel-pink selection:text-brand-dark overflow-x-hidden w-full max-w-full">
         {/* 1. Barra de Navegación Superior */}
         <Navbar theme={theme} siteSettings={siteSettings} />
 
@@ -89,6 +90,9 @@ export default function LandingView({
 
         {/* 7. Pie de Página (Footer) */}
         <Footer footer={footer} theme={theme} siteSettings={siteSettings} />
+
+        {/* 8. Barra Flotante de Acciones Rápidas (Sólo Móviles) */}
+        <MobileFloatingBar siteSettings={siteSettings} theme={theme} />
       </main>
     </>
   );

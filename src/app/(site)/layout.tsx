@@ -65,8 +65,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" className={`${jakarta.variable} ${inter.variable} scroll-smooth`}>
-      <body className="min-h-screen bg-[#fcf5f2] text-[#010101] selection:bg-pastel-pink selection:text-black">
+    <html lang="es" className={`${jakarta.variable} ${inter.variable} scroll-smooth overflow-x-hidden w-full max-w-full`}>
+      <body className="min-h-screen bg-[#fcf5f2] text-[#010101] selection:bg-pastel-pink selection:text-black overflow-x-hidden w-full max-w-full">
         {children}
       </body>
     </html>

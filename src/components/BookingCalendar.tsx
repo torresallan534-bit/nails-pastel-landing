@@ -302,31 +302,31 @@ export default function BookingCalendar({
             `Elige la modalidad que prefieras: el agendador guiado con comprobante directo a WhatsApp o la página de citas nativa de Google Calendar vinculada a ${siteSettings.notificationEmail}.`}
         </p>
 
-        {/* Segmented Mode Switch */}
-        <div className="mt-8 inline-flex p-1.5 rounded-2xl bg-white border border-canvas-border shadow-xs">
+        {/* Segmented Mode Switch - Mobile Responsive */}
+        <div className="mt-6 sm:mt-8 flex flex-col sm:inline-flex sm:flex-row p-1.5 rounded-2xl bg-white border border-canvas-border shadow-xs max-w-full w-full sm:w-auto gap-1 sm:gap-0">
           <button
             type="button"
             onClick={() => setBookingMode('interactive')}
-            className={`min-h-[44px] px-5 py-2 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all flex items-center gap-2 ${
+            className={`min-h-[44px] px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all flex items-center justify-center gap-2 w-full sm:w-auto ${
               bookingMode === 'interactive'
                 ? 'bg-brand-dark text-white shadow-sm'
                 : 'text-brand-muted hover:text-brand-dark hover:bg-canvas/50'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-pastel-pink" />
+            <Sparkles className="w-4 h-4 text-pastel-pink shrink-0" />
             <span>Agendador Guiado + WhatsApp</span>
           </button>
 
           <button
             type="button"
             onClick={() => setBookingMode('google-calendar')}
-            className={`min-h-[44px] px-5 py-2 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all flex items-center gap-2 ${
+            className={`min-h-[44px] px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all flex items-center justify-center gap-2 w-full sm:w-auto ${
               bookingMode === 'google-calendar'
                 ? 'bg-brand-dark text-white shadow-sm'
                 : 'text-brand-muted hover:text-brand-dark hover:bg-canvas/50'
             }`}
           >
-            <CalendarCheck2 className="w-4 h-4 text-pastel-pink" />
+            <CalendarCheck2 className="w-4 h-4 text-pastel-pink shrink-0" />
             <span>Google Calendar Oficial</span>
           </button>
         </div>
@@ -334,12 +334,12 @@ export default function BookingCalendar({
 
       {/* MODE 1: INTERACTIVE AGENDADOR */}
       {bookingMode === 'interactive' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start animate-in fade-in duration-300">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start animate-in fade-in duration-300">
           {/* LEFT COLUMN: Service & Schedule Selection (7 cols) */}
-          <div className="lg:col-span-7 space-y-8">
+          <div className="lg:col-span-7 space-y-6 sm:space-y-8">
             {/* Step 1: Service Selection */}
-            <div className="bg-white/85 rounded-3xl p-6 sm:p-8 shadow-card border border-canvas-border">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-white/85 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-card border border-canvas-border">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <span className="text-xs font-bold uppercase tracking-wider text-pastel-pinkDark flex items-center gap-1.5">
                   Paso 1
                 </span>
@@ -435,20 +435,20 @@ export default function BookingCalendar({
             </div>
 
             {/* Step 2: Date Picker */}
-            <div className="bg-white/85 rounded-3xl p-6 sm:p-8 shadow-card border border-canvas-border">
+            <div className="bg-white/85 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-card border border-canvas-border">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-pastel-pinkDark">
                   Paso 2
                 </span>
                 <span className="text-xs text-brand-muted">Lunes a Sábado</span>
               </div>
-              <h3 className="text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+              <h3 className="text-lg sm:text-xl font-bold text-brand-dark mb-3 sm:mb-4 flex items-center gap-2">
                 <CalendarIcon className="w-5 h-5 text-brand-dark" />
                 Selecciona el día de tu cita
               </h3>
 
               {/* Horizontal scroll of days (touch-friendly >= 48px) */}
-              <div className="flex gap-2.5 overflow-x-auto pb-3 pt-1 no-scrollbar -mx-2 px-2">
+              <div className="flex gap-2 sm:gap-2.5 overflow-x-auto pb-3 pt-1 no-scrollbar -mx-2 px-2 sm:mx-0 sm:px-0">
                 {availableDates.map((item) => {
                   const isSelected = selectedDate === item.dateStr;
                   const isDisabled = item.isSunday;
@@ -461,19 +461,19 @@ export default function BookingCalendar({
                       onClick={() => {
                         if (!isDisabled) setSelectedDate(item.dateStr);
                       }}
-                      className={`min-w-[72px] h-[92px] p-2 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 shrink-0 ${
+                      className={`min-w-[64px] sm:min-w-[72px] h-[86px] sm:h-[92px] p-2 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center transition-all duration-200 shrink-0 active:scale-95 ${
                         isDisabled
                           ? 'opacity-40 cursor-not-allowed bg-gray-100 text-gray-400 border border-gray-200'
                           : isSelected
-                          ? 'bg-brand-dark text-white shadow-md scale-102 ring-2 ring-brand-dark/20'
+                          ? 'bg-brand-dark text-white shadow-md ring-2 ring-brand-dark/20'
                           : 'bg-canvas border border-canvas-border hover:border-pastel-pink hover:bg-white text-brand-dark'
                       }`}
                     >
-                      <span className="text-xs font-medium uppercase tracking-wider opacity-80">
+                      <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider opacity-80">
                         {item.dayName}
                       </span>
-                      <span className="text-2xl font-extrabold my-0.5">{item.dayNumber}</span>
-                      <span className="text-[11px] opacity-75">{item.monthName}</span>
+                      <span className="text-xl sm:text-2xl font-extrabold my-0.5">{item.dayNumber}</span>
+                      <span className="text-[10px] sm:text-[11px] opacity-75">{item.monthName}</span>
                     </button>
                   );
                 })}
@@ -484,14 +484,14 @@ export default function BookingCalendar({
             </div>
 
             {/* Step 3: 2-Hour Time Slots Selector */}
-            <div className="bg-white/85 rounded-3xl p-6 sm:p-8 shadow-card border border-canvas-border">
+            <div className="bg-white/85 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-card border border-canvas-border">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-pastel-pinkDark">
                   Paso 3
                 </span>
                 <span className="text-xs text-brand-muted">Bloques de 2h + 10m buffer</span>
               </div>
-              <h3 className="text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+              <h3 className="text-lg sm:text-xl font-bold text-brand-dark mb-3 sm:mb-4 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-brand-dark" />
                 Selecciona tu franja horaria
               </h3>
@@ -557,13 +557,13 @@ export default function BookingCalendar({
           </div>
 
           {/* RIGHT COLUMN: Contact Form & Summary & Deposit Box (5 cols) */}
-          <div className="lg:col-span-5 sticky top-24 space-y-6">
+          <div className="lg:col-span-5 lg:sticky lg:top-24 space-y-6">
             <form
               onSubmit={handleBookingSubmit}
-              className="bg-white rounded-3xl p-6 sm:p-8 shadow-float border border-canvas-border"
+              className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 shadow-float border border-canvas-border"
             >
-              <div className="border-b border-canvas-border pb-5 mb-5">
-                <h3 className="text-2xl font-extrabold text-brand-dark tracking-tight">
+              <div className="border-b border-canvas-border pb-4 sm:pb-5 mb-4 sm:mb-5">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-brand-dark tracking-tight">
                   Resumen de tu Turno
                 </h3>
                 <p className="text-xs text-brand-muted mt-1">
@@ -572,7 +572,7 @@ export default function BookingCalendar({
               </div>
 
               {/* Client Inputs */}
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3.5 sm:space-y-4 mb-5 sm:mb-6">
                 <div>
                   <label className="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-1.5">
                     Tu Nombre y Apellido *
@@ -583,7 +583,7 @@ export default function BookingCalendar({
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
                     placeholder="Ej: Laura Sofía Martínez"
-                    className="w-full h-12 px-4 rounded-xl border border-canvas-border bg-canvas/40 text-brand-dark placeholder-brand-muted/60 text-sm focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:border-brand-dark transition-all"
+                    className="w-full h-12 px-4 rounded-xl border border-canvas-border bg-canvas/40 text-brand-dark placeholder-brand-muted/60 text-base focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:border-brand-dark transition-all"
                   />
                 </div>
 
@@ -597,7 +597,7 @@ export default function BookingCalendar({
                     value={clientPhone}
                     onChange={(e) => setClientPhone(e.target.value)}
                     placeholder="Ej: 305 282 9795"
-                    className="w-full h-12 px-4 rounded-xl border border-canvas-border bg-canvas/40 text-brand-dark placeholder-brand-muted/60 text-sm focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:border-brand-dark transition-all"
+                    className="w-full h-12 px-4 rounded-xl border border-canvas-border bg-canvas/40 text-brand-dark placeholder-brand-muted/60 text-base focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:border-brand-dark transition-all"
                   />
                 </div>
 
@@ -610,7 +610,7 @@ export default function BookingCalendar({
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Ej: Traigo semipermanente de otro salón para retirar / Tengo una foto de Pinterest..."
-                    className="w-full p-3 rounded-xl border border-canvas-border bg-canvas/40 text-brand-dark placeholder-brand-muted/60 text-xs focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:border-brand-dark transition-all resize-none"
+                    className="w-full p-3 rounded-xl border border-canvas-border bg-canvas/40 text-brand-dark placeholder-brand-muted/60 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:border-brand-dark transition-all resize-none"
                   />
                 </div>
               </div>
