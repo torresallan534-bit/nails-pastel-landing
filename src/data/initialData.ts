@@ -5,6 +5,7 @@ export const siteConfig: SiteConfig = {
   tagline: 'Estudio de Manicura & Nail Art Profesional',
   whatsappNumber: '573052829795',
   notificationEmail: 'nelmarianm@gmail.com',
+  googleCalendarScheduleUrl: 'https://calendar.google.com/calendar/u/0/appointments/schedules',
   locationAddress: 'Local propio y privado — Bogotá / Colombia (Dirección exacta y mapa enviados al confirmar tu anticipo)',
   instagramHandle: '@nailspastel',
   openTime: '07:00',

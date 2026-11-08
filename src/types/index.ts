@@ -33,6 +33,7 @@ export interface SiteConfig {
   tagline: string;
   whatsappNumber: string;
   notificationEmail: string;
+  googleCalendarScheduleUrl: string;
   locationAddress: string;
   instagramHandle: string;
   openTime: string; // "07:00"

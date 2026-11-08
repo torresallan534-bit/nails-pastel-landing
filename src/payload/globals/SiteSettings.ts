@@ -44,6 +44,15 @@ export const SiteSettings: GlobalConfig = {
               label: 'Correo de Notificaciones / Google Calendar',
             },
             {
+              name: 'googleCalendarScheduleUrl',
+              type: 'text',
+              defaultValue: 'https://calendar.google.com/calendar/u/0/appointments/schedules',
+              label: 'Enlace a Página de Citas de Google Calendar (Appointment Schedule)',
+              admin: {
+                description: 'Link público generado desde calendar.google.com para citas nativas gratuitas.',
+              },
+            },
+            {
               name: 'locationAddress',
               type: 'text',
               defaultValue: 'Local propio y privado (Dirección exacta enviada al confirmar anticipo)',
