@@ -16,19 +16,23 @@ import {
   CalendarCheck2,
   Smartphone,
 } from 'lucide-react';
-import { ServiceItem, TimeSlot, ServiceVariant } from '@/types';
-import { siteConfig } from '@/data/initialData';
+import { ServiceItem, TimeSlot, ServiceVariant, SectionsContentData, SiteConfig } from '@/types';
+import { defaultSectionsContent, siteConfig as defaultSiteConfig } from '@/data/initialData';
 
 interface BookingCalendarProps {
   services: ServiceItem[];
   selectedServiceId?: string;
   onServiceChange?: (serviceId: string) => void;
+  sections?: SectionsContentData;
+  siteSettings?: SiteConfig;
 }
 
 export default function BookingCalendar({
   services,
   selectedServiceId,
   onServiceChange,
+  sections = defaultSectionsContent,
+  siteSettings = defaultSiteConfig,
 }: BookingCalendarProps) {
   // Booking Mode: 'interactive' (con anticipo & WhatsApp) or 'google-calendar' (página nativa Google)
   const [bookingMode, setBookingMode] = useState<'interactive' | 'google-calendar'>('interactive');
@@ -159,7 +163,7 @@ export default function BookingCalendar({
   }, [activeService, selectedVariants]);
 
   const totalPrice = (activeService?.price || 0) + totalVariantsPrice;
-  const depositAmount = siteConfig.depositAmount;
+  const depositAmount = siteSettings.depositAmount;
   const remainingBalance = Math.max(0, totalPrice - depositAmount);
 
   const selectedVariantsObjects: ServiceVariant[] = useMemo(() => {
@@ -191,7 +195,7 @@ export default function BookingCalendar({
 
   // WhatsApp Link generation for interactive booking
   const buildWhatsAppUrl = () => {
-    const rawPhone = siteConfig.whatsappNumber; // '573052829795'
+    const rawPhone = siteSettings.whatsappNumber; // '573052829795'
     const serviceName = activeService?.title || 'Servicio de Manicura';
     const dateStr = formattedBookingDate;
     const timeStr = selectedSlot?.displayTime || 'Turno a convenir';
@@ -209,7 +213,7 @@ export default function BookingCalendar({
 
   // WhatsApp Link for Google Calendar confirmation
   const buildGoogleCalendarWhatsAppUrl = () => {
-    const rawPhone = siteConfig.whatsappNumber;
+    const rawPhone = siteSettings.whatsappNumber;
     const message = `¡Hola Nelmarian! 🌸 Acabo de apartar mi cita en tu página de Google Calendar para Nails Pastel. Ya realicé la transferencia de los $15.000 COP de anticipo a tu Nequi/Daviplata. Adjunto mi comprobante para confirmar mi cupo.`;
     return `https://wa.me/${rawPhone}?text=${encodeURIComponent(message)}`;
   };
@@ -288,14 +292,14 @@ export default function BookingCalendar({
       <div className="text-center max-w-3xl mx-auto mb-10">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-pastel-purple/50 text-brand-dark border border-pastel-purple/80 mb-4">
           <Sparkles className="w-3.5 h-3.5 text-brand-dark" />
-          Agenda Inteligente & Turnos de 2 Horas
+          {sections.bookingBadge || 'Agenda Inteligente & Turnos de 2 Horas'}
         </span>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-dark">
-          Reserva tu cita en <span className="text-pastel-pinkDark">Nails Pastel</span>
+          {sections.bookingTitle || 'Reserva tu Turno en Línea'}
         </h2>
         <p className="mt-3 text-base sm:text-lg text-brand-muted">
-          Elige la modalidad que prefieras: el agendador guiado con comprobante directo a WhatsApp o
-          la página de citas nativa de Google Calendar vinculada a <strong className="text-brand-dark">nelmarianm@gmail.com</strong>.
+          {sections.bookingSubtitle ||
+            `Elige la modalidad que prefieras: el agendador guiado con comprobante directo a WhatsApp o la página de citas nativa de Google Calendar vinculada a ${siteSettings.notificationEmail}.`}
         </p>
 
         {/* Segmented Mode Switch */}
@@ -747,13 +751,13 @@ export default function BookingCalendar({
                   Sincronización directa con Nelmarian
                 </h3>
                 <p className="text-xs sm:text-sm text-brand-muted">
-                  Vinculado al correo oficial: <strong className="text-brand-dark">nelmarianm@gmail.com</strong>
+                  Vinculado al correo oficial: <strong className="text-brand-dark">{siteSettings.notificationEmail}</strong>
                 </p>
               </div>
 
               {/* Direct Open Button */}
               <a
-                href={siteConfig.googleCalendarScheduleUrl}
+                href={siteSettings.googleCalendarScheduleUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="min-h-[48px] px-6 py-2.5 rounded-2xl bg-brand-dark text-white hover:bg-black font-bold text-xs tracking-wide shadow-md flex items-center gap-2 shrink-0"
@@ -769,7 +773,7 @@ export default function BookingCalendar({
                 <Smartphone className="w-5 h-5 text-pastel-pinkDark shrink-0 mt-0.5" />
                 <div className="text-xs">
                   <span className="font-extrabold text-brand-dark text-sm block">
-                    Recuerda transferir tu anticipo de $15.000 COP
+                    Recuerda transferir tu anticipo de ${siteSettings.depositAmount.toLocaleString('es-CO')} COP
                   </span>
                   <p className="text-brand-muted mt-0.5">
                     Al agendar por Google Calendar, tu turno queda en reserva preliminar. Transfiere
@@ -819,7 +823,7 @@ export default function BookingCalendar({
             </div>
 
             <a
-              href={siteConfig.googleCalendarScheduleUrl}
+              href={siteSettings.googleCalendarScheduleUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-pastel-pink hover:bg-pastel-pinkHover text-brand-dark font-extrabold text-xs tracking-wide shadow-xs flex items-center justify-center gap-2 transition-all shrink-0"
@@ -832,7 +836,7 @@ export default function BookingCalendar({
           {/* Embedded Google Calendar Appointment Schedule Frame */}
           <div className="relative rounded-4xl overflow-hidden bg-white shadow-float border border-canvas-border min-h-[680px]">
             <iframe
-              src={siteConfig.googleCalendarScheduleUrl}
+              src={siteSettings.googleCalendarScheduleUrl}
               title="Google Calendar Appointment Schedule - Nails Pastel"
               className="w-full h-[700px] border-0"
               loading="lazy"

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import {
   Camera,
@@ -9,21 +9,27 @@ import {
   ChevronRight,
   Maximize2,
   Instagram,
-  Sparkles,
 } from 'lucide-react';
-import { GalleryItem } from '@/types';
+import { GalleryItem, SectionsContentData } from '@/types';
+import { defaultSectionsContent } from '@/data/initialData';
 
 interface BentoGalleryProps {
   items: GalleryItem[];
+  sections?: SectionsContentData;
 }
 
-type TagFilter = 'Todos' | 'Tendencias' | 'Acrílicas' | 'Minimalistas' | 'Diseño a mano';
-
-export default function BentoGallery({ items }: BentoGalleryProps) {
-  const [selectedTag, setSelectedTag] = useState<TagFilter>('Todos');
+export default function BentoGallery({
+  items,
+  sections = defaultSectionsContent,
+}: BentoGalleryProps) {
+  const [selectedTag, setSelectedTag] = useState<string>('Todos');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const tags: TagFilter[] = ['Todos', 'Tendencias', 'Acrílicas', 'Minimalistas', 'Diseño a mano'];
+  // Dynamically compute tags from gallery items
+  const tags = useMemo(() => {
+    const rawTags = Array.from(new Set(items.map((i) => i.tag)));
+    return ['Todos', ...rawTags];
+  }, [items]);
 
   const filteredItems = items.filter((item) => {
     if (selectedTag === 'Todos') return true;
@@ -36,10 +42,14 @@ export default function BentoGallery({ items }: BentoGalleryProps) {
       if (lightboxIndex === null) return;
       if (e.key === 'Escape') setLightboxIndex(null);
       if (e.key === 'ArrowRight') {
-        setLightboxIndex((prev) => (prev !== null && prev < filteredItems.length - 1 ? prev + 1 : 0));
+        setLightboxIndex((prev) =>
+          prev !== null && prev < filteredItems.length - 1 ? prev + 1 : 0
+        );
       }
       if (e.key === 'ArrowLeft') {
-        setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : filteredItems.length - 1));
+        setLightboxIndex((prev) =>
+          prev !== null && prev > 0 ? prev - 1 : filteredItems.length - 1
+        );
       }
     };
 
@@ -56,26 +66,26 @@ export default function BentoGallery({ items }: BentoGalleryProps) {
         <div>
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-pastel-soft/60 text-brand-dark border border-pastel-soft mb-3">
             <Camera className="w-3.5 h-3.5 text-brand-dark" />
-            Portafolio Real & Inspiración
+            {sections.galleryBadge || 'Portafolio Real & Inspiración'}
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-dark">
-            Galería de Creaciones
+            {sections.galleryTitle || 'Galería de Creaciones'}
           </h2>
           <p className="mt-2 text-sm sm:text-base text-brand-muted max-w-xl">
-            Cada set es una obra única diseñada al milímetro. Fotografía 100% de nuestras clientas
-            reales en Nails Pastel.
+            {sections.gallerySubtitle ||
+              'Cada set es una obra única diseñada al milímetro. Fotografía 100% de nuestras clientas reales.'}
           </p>
         </div>
 
         {/* Instagram Profile Link */}
         <a
-          href="https://instagram.com"
+          href={sections.instagramUrl || 'https://instagram.com'}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-canvas-border hover:border-pastel-pink text-xs font-bold text-brand-dark shadow-xs transition-all hover:scale-105 shrink-0 self-start md:self-auto"
         >
           <Instagram className="w-4 h-4 text-pastel-pinkDark" />
-          <span>Ver más en Instagram @nailspastel</span>
+          <span>{sections.instagramButtonText || 'Ver más en Instagram'}</span>
         </a>
       </div>
 
@@ -140,7 +150,7 @@ export default function BentoGallery({ items }: BentoGalleryProps) {
                   {item.title}
                 </h4>
                 {item.caption && (
-                  <p className="text-xs text-white/80 line-clamp-2 mt-1 drop-shadow-xs">
+                  <p className="text-xs text-white/70 line-clamp-2 mt-1 drop-shadow-xs">
                     {item.caption}
                   </p>
                 )}

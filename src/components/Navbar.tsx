@@ -4,9 +4,18 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Menu, X, MessageCircle, Sparkles } from 'lucide-react';
-import { siteConfig } from '@/data/initialData';
+import { ThemeBrandingData, SiteConfig } from '@/types';
+import { defaultThemeBranding, siteConfig as defaultSiteConfig } from '@/data/initialData';
 
-export default function Navbar() {
+interface NavbarProps {
+  theme?: ThemeBrandingData;
+  siteSettings?: SiteConfig;
+}
+
+export default function Navbar({
+  theme = defaultThemeBranding,
+  siteSettings = defaultSiteConfig,
+}: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -16,8 +25,8 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative w-12 h-12 rounded-2xl overflow-hidden border border-pastel-purple/50 bg-white p-1 shadow-xs group-hover:scale-105 transition-transform duration-200">
             <Image
-              src="/images/logo/logo.png"
-              alt="Nails Pastel Logo"
+              src={theme.logoUrl || '/images/logo/logo.png'}
+              alt={theme.businessName || 'Logo'}
               fill
               className="object-contain p-1"
               priority
@@ -25,10 +34,10 @@ export default function Navbar() {
           </div>
           <div>
             <span className="font-extrabold text-lg sm:text-xl tracking-tight text-brand-dark block leading-none">
-              Nails Pastel
+              {theme.businessName || 'Nails Pastel'}
             </span>
             <span className="text-[10px] font-semibold tracking-wider uppercase text-pastel-pinkDark">
-              Luxury Nail Studio
+              {theme.tagline || 'Luxury Nail Studio'}
             </span>
           </div>
         </Link>
@@ -54,7 +63,7 @@ export default function Navbar() {
             Anticipo & Políticas
           </a>
           <a
-            href={`https://wa.me/${siteConfig.whatsappNumber}`}
+            href={`https://wa.me/${siteSettings.whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs text-brand-muted hover:text-brand-dark transition-colors"
@@ -112,14 +121,14 @@ export default function Navbar() {
               Anticipo & Políticas
             </a>
             <a
-              href={`https://wa.me/${siteConfig.whatsappNumber}`}
+              href={`https://wa.me/${siteSettings.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
               className="py-2.5 px-3 rounded-xl hover:bg-canvas transition-colors flex items-center gap-2 text-emerald-700"
             >
               <MessageCircle className="w-4 h-4" />
-              <span>WhatsApp Directo (+57 305 282 9795)</span>
+              <span>WhatsApp Directo (+{siteSettings.whatsappNumber})</span>
             </a>
           </nav>
 

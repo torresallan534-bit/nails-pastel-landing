@@ -1,9 +1,24 @@
 import React from 'react';
 import Image from 'next/image';
 import { MessageCircle, Mail, Clock, MapPin, Heart, Instagram } from 'lucide-react';
-import { siteConfig } from '@/data/initialData';
+import { FooterContentData, ThemeBrandingData, SiteConfig } from '@/types';
+import {
+  defaultFooterContent,
+  defaultThemeBranding,
+  siteConfig as defaultSiteConfig,
+} from '@/data/initialData';
 
-export default function Footer() {
+interface FooterProps {
+  footer?: FooterContentData;
+  theme?: ThemeBrandingData;
+  siteSettings?: SiteConfig;
+}
+
+export default function Footer({
+  footer = defaultFooterContent,
+  theme = defaultThemeBranding,
+  siteSettings = defaultSiteConfig,
+}: FooterProps) {
   return (
     <footer className="border-t border-canvas-border bg-white/70 backdrop-blur-md pt-16 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-canvas-border">
@@ -12,31 +27,29 @@ export default function Footer() {
           <div className="flex items-center gap-3">
             <div className="relative w-12 h-12 rounded-2xl overflow-hidden border border-pastel-pink/40 bg-white p-1 shadow-xs">
               <Image
-                src="/images/logo/logo.png"
-                alt="Nails Pastel"
+                src={theme.logoUrl || '/images/logo/logo.png'}
+                alt={theme.businessName || 'Nails Pastel'}
                 fill
                 className="object-contain p-1"
               />
             </div>
             <div>
               <span className="font-extrabold text-xl tracking-tight text-brand-dark block">
-                Nails Pastel
+                {theme.businessName || 'Nails Pastel'}
               </span>
               <span className="text-xs text-pastel-pinkDark font-semibold uppercase tracking-wider">
-                Luxury Nail Studio
+                {theme.tagline || 'Luxury Nail Studio'}
               </span>
             </div>
           </div>
 
           <p className="text-xs sm:text-sm text-brand-muted max-w-sm leading-relaxed">
-            Estudio privado de manicura estética y de alta gama. Técnica rusa, arquitectura y
-            nivelación con base rubber, esculpido y micro nail art en turnos personalizados de 2
-            horas.
+            {footer.aboutText}
           </p>
 
           <div className="pt-2 flex items-center gap-3">
             <a
-              href={`https://wa.me/${siteConfig.whatsappNumber}`}
+              href={`https://wa.me/${siteSettings.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
@@ -45,7 +58,7 @@ export default function Footer() {
               <MessageCircle className="w-5 h-5" />
             </a>
             <a
-              href="https://instagram.com"
+              href={footer.instagramUrl || 'https://instagram.com'}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
@@ -54,7 +67,7 @@ export default function Footer() {
               <Instagram className="w-5 h-5" />
             </a>
             <a
-              href={`mailto:${siteConfig.notificationEmail}`}
+              href={`mailto:${siteSettings.notificationEmail}`}
               aria-label="Correo"
               className="w-10 h-10 rounded-xl bg-canvas border border-canvas-border hover:border-pastel-purple hover:text-brand-dark flex items-center justify-center text-brand-dark transition-all"
             >
@@ -72,22 +85,22 @@ export default function Footer() {
             <li className="flex items-start gap-2">
               <Clock className="w-4 h-4 text-pastel-pinkDark shrink-0 mt-0.5" />
               <div>
-                <strong className="text-brand-dark block">Lunes a Sábado:</strong>
-                <span>7:00 AM – 6:00 PM</span>
+                <strong className="text-brand-dark block">Atención:</strong>
+                <span>{footer.scheduleLine1 || 'Lunes a Sábado: 7:00 AM – 6:00 PM'}</span>
               </div>
             </li>
             <li className="flex items-start gap-2">
               <Clock className="w-4 h-4 text-pastel-purple shrink-0 mt-0.5" />
               <div>
-                <strong className="text-brand-dark block">Bloques de Atención:</strong>
-                <span>Turnos de 2 horas continuas</span>
+                <strong className="text-brand-dark block">Bloques:</strong>
+                <span>{footer.scheduleLine2 || 'Turnos de 2 horas continuas'}</span>
               </div>
             </li>
             <li className="flex items-start gap-2">
               <Clock className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-brand-dark block">Pausa de Almuerzo:</strong>
-                <span>1:00 PM – 2:00 PM (No agendable)</span>
+                <strong className="text-brand-dark block">Almuerzo:</strong>
+                <span>{footer.scheduleLine3 || '1:00 PM – 2:00 PM (No agendable)'}</span>
               </div>
             </li>
           </ul>
@@ -101,20 +114,17 @@ export default function Footer() {
           <ul className="text-xs text-brand-muted space-y-2.5">
             <li className="flex items-start gap-2">
               <MapPin className="w-4 h-4 text-pastel-pinkDark shrink-0 mt-0.5" />
-              <span>
-                Local propio y privado en Bogotá, Colombia. (Dirección compartida tras verificar el
-                anticipo).
-              </span>
+              <span>{footer.addressText || siteSettings.locationAddress}</span>
             </li>
             <li className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <span>
                 WhatsApp:{' '}
                 <a
-                  href={`https://wa.me/${siteConfig.whatsappNumber}`}
+                  href={`https://wa.me/${siteSettings.whatsappNumber}`}
                   className="font-bold text-brand-dark hover:underline"
                 >
-                  +57 305 282 9795
+                  +{siteSettings.whatsappNumber}
                 </a>
               </span>
             </li>
@@ -123,7 +133,7 @@ export default function Footer() {
               <span>
                 Citas Google Calendar:{' '}
                 <a
-                  href={siteConfig.googleCalendarScheduleUrl}
+                  href={siteSettings.googleCalendarScheduleUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-bold text-brand-dark hover:underline"
@@ -136,18 +146,16 @@ export default function Footer() {
 
           <div className="pt-2">
             <div className="p-3 rounded-xl bg-canvas border border-canvas-border text-[11px] text-brand-muted">
-              ⚠️ <strong>Recuerda:</strong> Anticipo de $15.000 COP requerido para apartar tu cupo
-              (Nequi o Daviplata).
+              ⚠️ <strong>Recuerda:</strong> Anticipo de ${siteSettings.depositAmount.toLocaleString('es-CO')} COP requerido para apartar tu cupo (Nequi o Daviplata).
             </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-muted gap-4">
-        <p>© {new Date().getFullYear()} Nails Pastel. Todos los derechos reservados.</p>
+        <p>{footer.copyrightText || `© ${new Date().getFullYear()} ${theme.businessName || 'Nails Pastel'}. Todos los derechos reservados.`}</p>
         <p className="flex items-center gap-1">
-          Hecho con <Heart className="w-3.5 h-3.5 text-pastel-pinkDark fill-pastel-pinkDark" /> para
-          Nelmarian & clientas de Nails Pastel.
+          {footer.creditsText || 'Hecho con amor por Panda Haus.'}
         </p>
       </div>
     </footer>

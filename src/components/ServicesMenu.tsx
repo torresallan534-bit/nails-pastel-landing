@@ -1,36 +1,40 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import {
   Sparkles,
   Clock,
   ArrowRight,
-  Check,
   ChevronDown,
   ChevronUp,
   Tag,
 } from 'lucide-react';
-import { ServiceItem } from '@/types';
+import { ServiceItem, SectionsContentData, SiteConfig } from '@/types';
+import { defaultSectionsContent, siteConfig as defaultSiteConfig } from '@/data/initialData';
 
 interface ServicesMenuProps {
   services: ServiceItem[];
+  sections?: SectionsContentData;
+  siteSettings?: SiteConfig;
   onSelectService: (serviceId: string) => void;
 }
 
-export default function ServicesMenu({ services, onSelectService }: ServicesMenuProps) {
+export default function ServicesMenu({
+  services,
+  sections = defaultSectionsContent,
+  siteSettings = defaultSiteConfig,
+  onSelectService,
+}: ServicesMenuProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('Todas');
   const [activeVariants, setActiveVariants] = useState<Record<string, string[]>>({});
   const [expandedDescriptions, setExpandedDescriptions] = useState<Record<string, boolean>>({});
 
-  const categories = [
-    'Todas',
-    'Semipermanente',
-    'Acrílicas / Esculpidas',
-    'Nail Art',
-    'Cuidado Natural',
-    'Mantenimiento',
-  ];
+  // Dynamically extract categories from available services
+  const categories = useMemo(() => {
+    const rawCategories = Array.from(new Set(services.map((s) => s.category)));
+    return ['Todas', ...rawCategories];
+  }, [services]);
 
   const filteredServices = services.filter((s) => {
     if (selectedCategory === 'Todas') return true;
@@ -77,14 +81,14 @@ export default function ServicesMenu({ services, onSelectService }: ServicesMenu
       <div className="text-center max-w-3xl mx-auto mb-12">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-pastel-pink/35 text-brand-dark border border-pastel-pink/70 mb-4">
           <Tag className="w-3.5 h-3.5 text-brand-dark" />
-          Menú de Servicios & Precios Claros
+          {sections.servicesBadge || 'Menú de Servicios & Precios Claros'}
         </span>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-dark">
-          Tarifas Transparentes & Adicionales
+          {sections.servicesTitle || 'Tarifas Transparentes & Adicionales'}
         </h2>
         <p className="mt-3 text-base sm:text-lg text-brand-muted">
-          Cada servicio incluye manicura combinada rusa de alta precisión. Selecciona tus adicionales
-          y mira el precio final en tiempo real.
+          {sections.servicesSubtitle ||
+            'Cada servicio incluye manicura combinada rusa de alta precisión. Selecciona tus adicionales y mira el precio final en tiempo real.'}
         </p>
       </div>
 
@@ -158,34 +162,38 @@ export default function ServicesMenu({ services, onSelectService }: ServicesMenu
 
                 <div className="flex items-center gap-2 text-xs text-brand-muted mb-3">
                   <Clock className="w-3.5 h-3.5 text-pastel-pinkDark" />
-                  <span>Turno dedicado de {srv.durationMinutes} minutos (2 horas)</span>
+                  <span>Turno dedicado de {srv.durationMinutes} minutos</span>
                 </div>
 
                 {/* Description with Expand */}
-                <p
-                  className={`text-xs sm:text-sm text-brand-muted leading-relaxed mb-3 ${
-                    !isExpanded ? 'line-clamp-2' : ''
-                  }`}
-                >
-                  {srv.description}
-                </p>
+                {srv.description && (
+                  <>
+                    <p
+                      className={`text-xs sm:text-sm text-brand-muted leading-relaxed mb-3 ${
+                        !isExpanded ? 'line-clamp-2' : ''
+                      }`}
+                    >
+                      {srv.description}
+                    </p>
 
-                {srv.description.length > 90 && (
-                  <button
-                    type="button"
-                    onClick={() => toggleDescription(srv.id)}
-                    className="text-xs font-semibold text-pastel-pinkDark hover:underline inline-flex items-center gap-1 mb-4"
-                  >
-                    {isExpanded ? (
-                      <>
-                        Ver menos <ChevronUp className="w-3 h-3" />
-                      </>
-                    ) : (
-                      <>
-                        Ver detalle completo <ChevronDown className="w-3 h-3" />
-                      </>
+                    {srv.description.length > 90 && (
+                      <button
+                        type="button"
+                        onClick={() => toggleDescription(srv.id)}
+                        className="text-xs font-semibold text-pastel-pinkDark hover:underline inline-flex items-center gap-1 mb-4"
+                      >
+                        {isExpanded ? (
+                          <>
+                            Ver menos <ChevronUp className="w-3 h-3" />
+                          </>
+                        ) : (
+                          <>
+                            Ver detalle completo <ChevronDown className="w-3 h-3" />
+                          </>
+                        )}
+                      </button>
                     )}
-                  </button>
+                  </>
                 )}
 
                 {/* Variants Selector */}
@@ -236,7 +244,10 @@ export default function ServicesMenu({ services, onSelectService }: ServicesMenu
                     </span>
                   </div>
                   <span className="text-[11px] text-brand-muted">
-                    Anticipo: <strong className="text-brand-dark">$15.000</strong>
+                    Anticipo:{' '}
+                    <strong className="text-brand-dark">
+                      {formatCOP(siteSettings.depositAmount || 15000)}
+                    </strong>
                   </span>
                 </div>
 

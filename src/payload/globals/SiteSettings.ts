@@ -2,16 +2,20 @@ import type { GlobalConfig } from 'payload';
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
-  label: 'Configuración General del Negocio',
+  label: '⚙️ Negocio, Horarios y Citas',
+  admin: {
+    group: 'Configuración y Negocio',
+  },
   access: {
     read: () => true,
+    update: () => true,
   },
   fields: [
     {
       type: 'tabs',
       tabs: [
         {
-          label: 'Datos de Contacto',
+          label: 'Datos de Contacto & Enlaces',
           fields: [
             {
               name: 'businessName',
@@ -19,12 +23,6 @@ export const SiteSettings: GlobalConfig = {
               required: true,
               defaultValue: 'Nails Pastel',
               label: 'Nombre del Estudio',
-            },
-            {
-              name: 'tagline',
-              type: 'text',
-              defaultValue: 'Estudio de Manicura & Nail Art Profesional',
-              label: 'Eslogan / Subtítulo',
             },
             {
               name: 'whatsappNumber',
@@ -57,12 +55,6 @@ export const SiteSettings: GlobalConfig = {
               type: 'text',
               defaultValue: 'Local propio y privado (Dirección exacta enviada al confirmar anticipo)',
               label: 'Ubicación / Dirección',
-            },
-            {
-              name: 'instagramHandle',
-              type: 'text',
-              defaultValue: '@nailspastel',
-              label: 'Usuario de Instagram',
             },
           ],
         },
@@ -127,7 +119,7 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
-          label: 'Políticas y Anticipo',
+          label: 'Anticipo y Nequi/Daviplata',
           fields: [
             {
               name: 'depositAmount',
@@ -140,7 +132,8 @@ export const SiteSettings: GlobalConfig = {
               name: 'depositInstructions',
               type: 'textarea',
               required: true,
-              defaultValue: 'Transfiere tu anticipo de $15.000 COP a Nequi o Daviplata al 3052829795 a nombre de Nelmarian. Envía el comprobante por WhatsApp para validar tu reserva en el sistema.',
+              defaultValue:
+                'Transfiere tu anticipo de $15.000 COP a Nequi o Daviplata al 3052829795 a nombre de Nelmarian. Envía el comprobante por WhatsApp para validar tu reserva en el sistema.',
               label: 'Instrucciones de Pago del Anticipo',
             },
             {
@@ -148,12 +141,6 @@ export const SiteSettings: GlobalConfig = {
               type: 'number',
               defaultValue: 10,
               label: 'Tolerancia máxima de retraso (minutos)',
-            },
-            {
-              name: 'bookingPolicies',
-              type: 'textarea',
-              defaultValue: '1. El anticipo es obligatorio para apartar el turno y se descuenta del valor total.\n2. Máximo 10 minutos de tolerancia.\n3. Cancelaciones o reprogramaciones deben avisarse con al menos 24 horas de anticipación.',
-              label: 'Políticas y Condiciones visibles al cliente',
             },
           ],
         },

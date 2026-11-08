@@ -33,6 +33,8 @@ declare module 'payload' {
       defaultColumns?: string[];
       group?: string;
       description?: string;
+      hidden?: any;
+      [key: string]: any;
     };
     access?: {
       read?: (...args: any[]) => boolean | Promise<boolean>;
@@ -57,6 +59,12 @@ declare module 'payload' {
   export interface GlobalConfig {
     slug: string;
     label?: string;
+    admin?: {
+      group?: string;
+      description?: string;
+      hidden?: any;
+      [key: string]: any;
+    };
     access?: {
       read?: (...args: any[]) => boolean | Promise<boolean>;
       update?: (...args: any[]) => boolean | Promise<boolean>;
@@ -80,6 +88,7 @@ declare module 'payload' {
   }
 
   export function buildConfig(config: Config): Config;
+  export function getPayload(args: { config: any }): Promise<any>;
 }
 
 declare module 'sharp' {

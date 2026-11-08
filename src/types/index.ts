@@ -35,7 +35,6 @@ export interface SiteConfig {
   notificationEmail: string;
   googleCalendarScheduleUrl: string;
   locationAddress: string;
-  instagramHandle: string;
   openTime: string; // "07:00"
   closeTime: string; // "18:00"
   lunchBreak: string; // "13:00"
@@ -45,8 +44,85 @@ export interface SiteConfig {
   depositAmount: number; // 15000
   depositInstructions: string;
   lateToleranceMinutes: number;
-  bookingPolicies: string;
   daysOpen: string[];
+}
+
+export interface ThemeBrandingData {
+  businessName: string;
+  tagline: string;
+  logoUrl: string;
+  primaryColor: string;
+  accentPurple: string;
+  accentSoft: string;
+  backgroundColor: string;
+  textColor: string;
+}
+
+export interface TrustBadgeItem {
+  title: string;
+  subtitle: string;
+  icon: string;
+}
+
+export interface HeroContentData {
+  badge: string;
+  title: string;
+  highlightWord: string;
+  subtitle: string;
+  ctaPrimaryText: string;
+  ctaSecondaryText: string;
+  heroImageUrl?: string;
+  showcaseBadge: string;
+  showcaseTitle: string;
+  showcasePill: string;
+  ratingText: string;
+  trustBadges: TrustBadgeItem[];
+}
+
+export interface SectionsContentData {
+  servicesBadge: string;
+  servicesTitle: string;
+  servicesSubtitle: string;
+  galleryBadge: string;
+  galleryTitle: string;
+  gallerySubtitle: string;
+  instagramButtonText: string;
+  instagramUrl: string;
+  bookingBadge: string;
+  bookingTitle: string;
+  bookingSubtitle: string;
+}
+
+export interface PolicyCardItem {
+  title: string;
+  description: string;
+  badgeText: string;
+  icon: string;
+}
+
+export interface PoliciesContentData {
+  badge: string;
+  title: string;
+  subtitle: string;
+  depositAmount: number;
+  accountNumber: string;
+  accountBank: string;
+  accountHolder: string;
+  footerNotice: string;
+  policiesList: PolicyCardItem[];
+}
+
+export interface FooterContentData {
+  aboutText: string;
+  scheduleLine1: string;
+  scheduleLine2: string;
+  scheduleLine3: string;
+  addressText: string;
+  phoneText: string;
+  instagramUrl: string;
+  tiktokUrl: string;
+  copyrightText: string;
+  creditsText: string;
 }
 
 export interface TimeSlot {

@@ -1,4 +1,124 @@
-import { ServiceItem, GalleryItem, SiteConfig } from '@/types';
+import {
+  ServiceItem,
+  GalleryItem,
+  SiteConfig,
+  ThemeBrandingData,
+  HeroContentData,
+  SectionsContentData,
+  PoliciesContentData,
+  FooterContentData,
+} from '@/types';
+
+export const defaultThemeBranding: ThemeBrandingData = {
+  businessName: 'Nails Pastel',
+  tagline: 'Luxury Nail Studio',
+  logoUrl: '/images/logo/logo.png',
+  primaryColor: '#ffa0d3',
+  accentPurple: '#f7bbfd',
+  accentSoft: '#f0cdef',
+  backgroundColor: '#fcf5f2',
+  textColor: '#010101',
+};
+
+export const defaultHeroContent: HeroContentData = {
+  badge: 'Estudio Privado • Agenda Abierta Hoy',
+  title: 'Tus uñas en manos expertas con la estética pastel que mereces.',
+  highlightWord: 'estética pastel',
+  subtitle:
+    'Especialistas en manicura rusa combinada, nivelación con base rubber, extensiones esculpidas y micro nail art. En Nails Pastel trabajamos con bloques dedicados de 2 horas para garantizar un acabado impecable, duradero y sin maltratar tu uña natural.',
+  ctaPrimaryText: 'Ver turnos disponibles',
+  ctaSecondaryText: 'Google Calendar Oficial',
+  heroImageUrl: '/images/gallery/work-1.jpg',
+  showcaseBadge: 'Técnica Estrella',
+  showcaseTitle: 'Semipermanente Rusa + Nivelación',
+  showcasePill: '28 días intactas',
+  ratingText: '5.0 (Calificación de clientas)',
+  trustBadges: [
+    {
+      title: 'Atención Personalizada',
+      subtitle: 'Solo tú y la manicurista',
+      icon: 'Heart',
+    },
+    {
+      title: 'Espacio Propio y Bioseguro',
+      subtitle: 'Instrumental esterilizado',
+      icon: 'ShieldCheck',
+    },
+    {
+      title: 'Cero Esperas',
+      subtitle: 'Turnos de 2h exactas',
+      icon: 'Clock',
+    },
+  ],
+};
+
+export const defaultSectionsContent: SectionsContentData = {
+  servicesBadge: 'Menú de Servicios & Precios Claros',
+  servicesTitle: 'Tarifas Transparentes & Adicionales',
+  servicesSubtitle:
+    'Cada servicio incluye manicura combinada rusa de alta precisión. Selecciona tus adicionales y mira el precio final en tiempo real.',
+  galleryBadge: 'Portafolio Real & Inspiración',
+  galleryTitle: 'Galería de Creaciones',
+  gallerySubtitle:
+    'Cada set es una obra única diseñada al milímetro. Fotografía 100% de nuestras clientas reales en Nails Pastel.',
+  instagramButtonText: 'Ver más en Instagram @nailspastel',
+  instagramUrl: 'https://instagram.com',
+  bookingBadge: 'Turnos Dedicados de 2 Horas',
+  bookingTitle: 'Reserva tu Turno en Línea',
+  bookingSubtitle:
+    'Selecciona tu servicio, el día y tu hora disponible. Nuestro sistema bloquea el turno y te genera el enlace de WhatsApp con el valor del anticipo.',
+};
+
+export const defaultPoliciesContent: PoliciesContentData = {
+  badge: 'Transparencia & Compromiso Mutuo',
+  title: 'Políticas de Reserva y Anticipo',
+  subtitle:
+    'Trabajamos con citas programadas para brindarte un servicio exclusivo, higiénico y sin retrasos.',
+  depositAmount: 15000,
+  accountNumber: '305 282 9795',
+  accountBank: 'Nequi / Daviplata',
+  accountHolder: 'Nelmarian',
+  footerNotice:
+    'Al confirmar tu cita por WhatsApp, te enviaremos la ubicación exacta y el mapa del estudio en Bogotá.',
+  policiesList: [
+    {
+      title: 'Anticipo de $15.000 COP',
+      description:
+        'Para apartar tu turno en la agenda se requiere el abono de $15.000 COP a través de Nequi o Daviplata. Este valor se deduce automáticamente del monto total el día de tu servicio.',
+      badgeText: 'Obligatorio para agendar',
+      icon: 'Smartphone',
+    },
+    {
+      title: 'Tolerancia de 10 Minutos',
+      description:
+        'Tolerancia máxima de retraso: 10 minutos. Pasado ese tiempo, el turno podría ser reajustado en diseño o cancelado para respetar el tiempo de la siguiente clienta.',
+      badgeText: 'Puntualidad es respeto mutuo',
+      icon: 'Clock',
+    },
+    {
+      title: 'Reprogramaciones (24h)',
+      description:
+        'Puedes reprogramar tu fecha u hora con al menos 24 horas de anticipación sin perder tu abono. Las cancelaciones de último momento no son reembolsables.',
+      badgeText: 'Aviso previo protege tu cupo',
+      icon: 'CalendarCheck',
+    },
+  ],
+};
+
+export const defaultFooterContent: FooterContentData = {
+  aboutText:
+    'Estudio privado de manicura estética y de alta gama. Técnica rusa, arquitectura y nivelación con base rubber, esculpido y micro nail art en turnos personalizados de 2 horas.',
+  scheduleLine1: 'Lunes a Sábado: 7:00 AM – 6:00 PM',
+  scheduleLine2: 'Bloques de Atención: Turnos de 2 horas continuas',
+  scheduleLine3: 'Pausa de Almuerzo: 1:00 PM – 2:00 PM (No agendable)',
+  addressText:
+    'Local propio y privado en Bogotá, Colombia. (Dirección compartida tras verificar el anticipo).',
+  phoneText: '+57 305 282 9795',
+  instagramUrl: 'https://instagram.com',
+  tiktokUrl: 'https://tiktok.com',
+  copyrightText: '© 2026 Nails Pastel. Todos los derechos reservados.',
+  creditsText: 'Hecho con amor por Panda Haus.',
+};
 
 export const siteConfig: SiteConfig = {
   businessName: 'Nails Pastel',
@@ -6,8 +126,8 @@ export const siteConfig: SiteConfig = {
   whatsappNumber: '573052829795',
   notificationEmail: 'nelmarianm@gmail.com',
   googleCalendarScheduleUrl: 'https://calendar.app.google/4FftVZiHKhicYrPdA',
-  locationAddress: 'Local propio y privado — Bogotá / Colombia (Dirección exacta y mapa enviados al confirmar tu anticipo)',
-  instagramHandle: '@nailspastel',
+  locationAddress:
+    'Local propio y privado — Bogotá / Colombia (Dirección exacta y mapa enviados al confirmar tu anticipo)',
   openTime: '07:00',
   closeTime: '18:00',
   lunchBreak: '13:00',
@@ -18,8 +138,6 @@ export const siteConfig: SiteConfig = {
   lateToleranceMinutes: 10,
   depositInstructions:
     'Para apartar tu turno y bloquear la agenda, debes realizar el anticipo de $15.000 COP a Nequi o Daviplata al número 3052829795 a nombre de Nelmarian. Este monto se descuenta del valor final del servicio.',
-  bookingPolicies:
-    '1. El turno solo queda agendado una vez validado el comprobante del anticipo de $15.000.\n2. La tolerancia máxima de retraso es de 10 minutos para garantizar la calidad del servicio de la siguiente clienta.\n3. Si necesitas reprogramar, hazlo con mínimo 24 horas de anticipación para conservar tu abono.',
   daysOpen: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'],
 };
 
