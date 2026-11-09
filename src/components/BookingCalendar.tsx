@@ -448,7 +448,7 @@ export default function BookingCalendar({
               </h3>
 
               {/* Horizontal scroll of days (touch-friendly >= 48px) */}
-              <div className="flex gap-2 sm:gap-2.5 overflow-x-auto pb-3 pt-1 no-scrollbar -mx-2 px-2 sm:mx-0 sm:px-0">
+              <div className="w-full flex gap-2 sm:gap-2.5 overflow-x-auto pb-3 pt-1 no-scrollbar">
                 {availableDates.map((item) => {
                   const isSelected = selectedDate === item.dateStr;
                   const isDisabled = item.isSunday;

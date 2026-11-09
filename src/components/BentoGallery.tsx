@@ -60,7 +60,7 @@ export default function BentoGallery({
   const activeLightboxItem = lightboxIndex !== null ? filteredItems[lightboxIndex] : null;
 
   return (
-    <section id="galeria" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="galeria" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full overflow-hidden">
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-5 sm:gap-6">
         <div>
@@ -89,8 +89,8 @@ export default function BentoGallery({
         </a>
       </div>
 
-      {/* Filter Tabs (Horizontal scroll on mobile) */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 sm:mb-8 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+      {/* Filter Tabs (Horizontal swipe without negative margin bugs) */}
+      <div className="w-full overflow-x-auto pb-2 mb-6 sm:mb-8 no-scrollbar flex items-center gap-2">
         {tags.map((tag) => {
           const isActive = selectedTag === tag;
           return (
@@ -98,7 +98,7 @@ export default function BentoGallery({
               key={tag}
               type="button"
               onClick={() => setSelectedTag(tag)}
-              className={`min-h-[44px] sm:min-h-[48px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold tracking-wide transition-all whitespace-nowrap shrink-0 active:scale-95 ${
+              className={`min-h-[44px] px-4 sm:px-5 py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold tracking-wide transition-all whitespace-nowrap shrink-0 active:scale-95 ${
                 isActive
                   ? 'bg-brand-dark text-white shadow-md ring-2 ring-brand-dark/20'
                   : 'bg-white/90 border border-canvas-border text-brand-muted hover:text-brand-dark hover:border-pastel-purple hover:bg-white'
@@ -110,20 +110,14 @@ export default function BentoGallery({
         })}
       </div>
 
-      {/* 2-Column Mobile Masonry Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 auto-rows-[190px] xs:auto-rows-[220px] sm:auto-rows-[280px]">
+      {/* Rock-solid 2-Column Mobile & 4-Column Desktop Luxury Grid (No broken holes) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
         {filteredItems.map((item, index) => {
-          // Dynamic bento sizing for visual rhythm on both 2-col mobile and 4-col desktop
-          const isSpanRow2 = (index % 4 === 0 && index !== 0) || item.aspectRatio === 'tall';
-          const isSpanCol2 = index === 0 || (index % 6 === 0 && index !== 0);
-
           return (
             <div
               key={item.id}
               onClick={() => setLightboxIndex(index)}
-              className={`group relative rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer shadow-xs hover:shadow-card transition-all duration-300 border border-canvas-border/80 bg-white active:scale-[0.98] ${
-                isSpanRow2 ? 'row-span-2' : ''
-              } ${isSpanCol2 ? 'col-span-2 sm:col-span-1 lg:col-span-2' : ''}`}
+              className="group relative w-full aspect-[4/5] rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer shadow-xs hover:shadow-card transition-all duration-300 border border-canvas-border/80 bg-white active:scale-[0.98]"
             >
               <Image
                 src={item.image}
@@ -135,28 +129,28 @@ export default function BentoGallery({
               />
 
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/85 via-brand-dark/20 to-transparent opacity-0 group-hover:opacity-100 sm:opacity-0 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-5 text-white" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/85 via-brand-dark/20 to-transparent opacity-80 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-2.5 sm:p-5 text-white" />
 
               {/* Tag Badge */}
-              <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10">
+              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10">
                 <span className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider bg-white/95 text-brand-dark backdrop-blur-md shadow-xs border border-white/50">
                   {item.tag}
                 </span>
               </div>
 
-              {/* Mobile Always-visible subtle bottom title bar + Desktop hover */}
-              <div className="absolute bottom-0 inset-x-0 p-2.5 sm:p-5 bg-gradient-to-t from-black/70 via-black/30 to-transparent sm:from-transparent text-white flex flex-col justify-end transition-all z-10">
-                <h4 className="font-bold text-xs sm:text-base leading-snug drop-shadow-sm truncate sm:whitespace-normal">
+              {/* Title bar */}
+              <div className="absolute bottom-0 inset-x-0 p-2.5 sm:p-4 text-white flex flex-col justify-end z-10">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base leading-snug drop-shadow-sm truncate">
                   {item.title}
                 </h4>
                 {item.caption && (
-                  <p className="text-[11px] sm:text-xs text-white/80 line-clamp-1 sm:line-clamp-2 mt-0.5 hidden sm:block">
+                  <p className="text-[11px] text-white/80 line-clamp-1 mt-0.5 hidden sm:block">
                     {item.caption}
                   </p>
                 )}
-                <div className="hidden sm:flex items-center gap-1.5 mt-2 text-[11px] font-semibold text-pastel-pink">
+                <div className="hidden sm:flex items-center gap-1.5 mt-1.5 text-[11px] font-semibold text-pastel-pink">
                   <Maximize2 className="w-3.5 h-3.5" />
-                  <span>Tocar para ampliar</span>
+                  <span>Ampliar</span>
                 </div>
               </div>
             </div>
@@ -185,7 +179,7 @@ export default function BentoGallery({
             <X className="w-6 h-6" />
           </button>
 
-          {/* Navigation Prev (min 48px) */}
+          {/* Navigation Prev */}
           <button
             type="button"
             onClick={(e) => {
@@ -200,7 +194,7 @@ export default function BentoGallery({
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          {/* Navigation Next (min 48px) */}
+          {/* Navigation Next */}
           <button
             type="button"
             onClick={(e) => {

@@ -76,7 +76,7 @@ export default function ServicesMenu({
   };
 
   return (
-    <section id="servicios" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="servicios" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full overflow-hidden">
       {/* Section Header */}
       <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
         <span className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold tracking-wider uppercase bg-pastel-pink/35 text-brand-dark border border-pastel-pink/70 mb-3 sm:mb-4">
@@ -92,8 +92,8 @@ export default function ServicesMenu({
         </p>
       </div>
 
-      {/* Category Pills (Touch-Friendly >= 44px on mobile, horizontal swipe) */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 sm:mb-10 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+      {/* Category Pills (Touch-Friendly, horizontal swipe without negative margin bugs) */}
+      <div className="w-full overflow-x-auto pb-2 mb-6 sm:mb-10 no-scrollbar flex items-center gap-2">
         {categories.map((cat) => {
           const isActive = selectedCategory === cat;
           return (
@@ -101,7 +101,7 @@ export default function ServicesMenu({
               key={cat}
               type="button"
               onClick={() => setSelectedCategory(cat)}
-              className={`min-h-[44px] sm:min-h-[48px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold tracking-wide transition-all whitespace-nowrap shrink-0 active:scale-95 ${
+              className={`min-h-[44px] px-4 sm:px-5 py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold tracking-wide transition-all whitespace-nowrap shrink-0 active:scale-95 ${
                 isActive
                   ? 'bg-brand-dark text-white shadow-md ring-2 ring-brand-dark/20'
                   : 'bg-white/90 border border-canvas-border text-brand-muted hover:text-brand-dark hover:border-pastel-pink hover:bg-white'
@@ -114,7 +114,7 @@ export default function ServicesMenu({
       </div>
 
       {/* Services Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
         {filteredServices.map((srv) => {
           const selectedForThis = activeVariants[srv.id] || [];
           const variantsPrice = (srv.variants || [])
@@ -126,11 +126,11 @@ export default function ServicesMenu({
           return (
             <div
               key={srv.id}
-              className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-card border border-canvas-border flex flex-col justify-between hover:border-pastel-purple hover:shadow-float transition-all duration-300 relative group"
+              className="w-full bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-card border border-canvas-border flex flex-col justify-between hover:border-pastel-purple hover:shadow-float transition-all duration-300 relative group overflow-hidden"
             >
               {srv.isPopular && (
-                <div className="absolute -top-3 right-5 sm:right-6 z-10">
-                  <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-pastel-pink text-brand-dark shadow-sm border border-pastel-pinkDark/30 flex items-center gap-1">
+                <div className="absolute top-3 right-3 sm:top-3 sm:right-4 z-10">
+                  <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-pastel-pink text-brand-dark shadow-sm border border-pastel-pinkDark/30 flex items-center gap-1">
                     <Sparkles className="w-3 h-3 text-brand-dark" />
                     Más Solicitado
                   </span>
@@ -140,7 +140,7 @@ export default function ServicesMenu({
               <div>
                 {/* Service Image Preview */}
                 {srv.image && (
-                  <div className="relative h-40 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden mb-4 sm:mb-5 border border-canvas-border/60 bg-canvas">
+                  <div className="relative h-44 xs:h-48 rounded-xl sm:rounded-2xl overflow-hidden mb-4 border border-canvas-border/60 bg-canvas">
                     <Image
                       src={srv.image}
                       alt={srv.title}
@@ -156,7 +156,7 @@ export default function ServicesMenu({
                 )}
 
                 {/* Title & Timing */}
-                <div className="flex items-start justify-between gap-2 mb-1.5">
+                <div className="flex items-start justify-between gap-2 mb-1.5 pr-20 sm:pr-0">
                   <h3 className="text-base sm:text-lg font-bold text-brand-dark leading-snug">{srv.title}</h3>
                 </div>
 
@@ -208,22 +208,22 @@ export default function ServicesMenu({
                         return (
                           <label
                             key={v.id}
-                            className={`min-h-[46px] flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition-colors active:scale-[0.99] ${
+                            className={`min-h-[46px] flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition-colors active:scale-[0.99] gap-2 ${
                               isChecked
                                 ? 'bg-pastel-cream border-pastel-pink text-brand-dark font-medium shadow-2xs'
                                 : 'bg-canvas/40 border-canvas-border/70 text-brand-muted hover:bg-canvas'
                             }`}
                           >
-                            <div className="flex items-center gap-2.5">
+                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
                               <input
                                 type="checkbox"
                                 checked={isChecked}
                                 onChange={() => toggleVariant(srv.id, v.id)}
-                                className="w-4 h-4 rounded text-pastel-pinkDark focus:ring-pastel-pink border-gray-300"
+                                className="w-4 h-4 rounded text-pastel-pinkDark focus:ring-pastel-pink border-gray-300 shrink-0"
                               />
-                              <span className="leading-tight">{v.name}</span>
+                              <span className="leading-tight text-xs truncate sm:whitespace-normal">{v.name}</span>
                             </div>
-                            <span className="font-bold text-brand-dark shrink-0 ml-2">
+                            <span className="font-bold text-brand-dark shrink-0 text-xs ml-1">
                               +{formatCOP(v.extraPrice)}
                             </span>
                           </label>
@@ -235,29 +235,29 @@ export default function ServicesMenu({
               </div>
 
               {/* Price & Action Button */}
-              <div className="pt-3.5 border-t border-canvas-border mt-3">
-                <div className="flex items-baseline justify-between mb-3.5">
-                  <div>
+              <div className="pt-3.5 border-t border-canvas-border mt-3 space-y-3">
+                <div className="flex items-baseline justify-between gap-2">
+                  <div className="min-w-0">
                     <span className="text-[10px] sm:text-[11px] text-brand-muted block">Precio estimado:</span>
-                    <span className="text-xl sm:text-2xl font-black text-brand-dark">
+                    <span className="text-xl sm:text-2xl font-black text-brand-dark block truncate">
                       {formatCOP(computedTotal)}
                     </span>
                   </div>
-                  <span className="text-[10px] sm:text-[11px] text-brand-muted">
-                    Anticipo:{' '}
-                    <strong className="text-brand-dark">
+                  <div className="text-right shrink-0">
+                    <span className="text-[10px] sm:text-[11px] text-brand-muted block">Anticipo:</span>
+                    <strong className="text-xs sm:text-sm text-brand-dark block">
                       {formatCOP(siteSettings.depositAmount || 15000)}
                     </strong>
-                  </span>
+                  </div>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => handleChooseService(srv.id)}
-                  className="w-full min-h-[48px] py-3 px-4 rounded-xl sm:rounded-2xl bg-canvas border border-canvas-border hover:bg-brand-dark hover:text-white hover:border-brand-dark active:scale-[0.98] text-brand-dark font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-200 shadow-2xs"
+                  className="w-full min-h-[48px] py-3 px-3 sm:px-4 rounded-xl sm:rounded-2xl bg-canvas border border-canvas-border hover:bg-brand-dark hover:text-white hover:border-brand-dark active:scale-[0.98] text-brand-dark font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 sm:gap-2 transition-all duration-200 shadow-2xs"
                 >
-                  <span>Elegir servicio y ver turnos</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="truncate">Elegir servicio y ver turnos</span>
+                  <ArrowRight className="w-4 h-4 shrink-0" />
                 </button>
               </div>
             </div>
