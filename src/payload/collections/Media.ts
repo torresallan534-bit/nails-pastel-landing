@@ -2,8 +2,20 @@ import type { CollectionConfig } from 'payload';
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: {
+    singular: 'Imagen / Archivo Multimedia',
+    plural: 'Biblioteca Multimedia',
+  },
+  admin: {
+    useAsTitle: 'alt',
+    defaultColumns: ['filename', 'alt', 'filesize', 'createdAt'],
+    group: 'Contenido Visual',
+  },
   upload: {
-    staticDir: 'public/media',
+    // Deshabilita almacenamiento en disco local para evitar errores EROFS en Vercel Serverless
+    disableLocalStorage: true,
+    mimeTypes: ['image/*'],
+    adminThumbnail: 'thumbnail',
     imageSizes: [
       {
         name: 'thumbnail',
@@ -24,17 +36,19 @@ export const Media: CollectionConfig = {
         position: 'centre',
       },
     ],
-    adminThumbnail: 'thumbnail',
-    mimeTypes: ['image/*'],
   },
   access: {
     read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
   },
   fields: [
     {
       name: 'alt',
       type: 'text',
-      required: true,
+      required: false,
+      defaultValue: 'Fotografía Nails Pastel',
       label: 'Texto Alternativo (Accesibilidad & SEO)',
     },
   ],

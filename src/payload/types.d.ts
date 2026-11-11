@@ -27,6 +27,10 @@ declare module 'payload' {
 
   export interface CollectionConfig {
     slug: string;
+    labels?: {
+      singular?: string;
+      plural?: string;
+    };
     auth?: boolean | Record<string, any>;
     admin?: {
       useAsTitle?: string;
@@ -44,6 +48,7 @@ declare module 'payload' {
     };
     upload?: {
       staticDir?: string;
+      disableLocalStorage?: boolean;
       imageSizes?: Array<{
         name: string;
         width?: number;
@@ -133,4 +138,8 @@ declare module '@payloadcms/next/routes' {
 declare module '@payload-config' {
   const configPromise: any;
   export default configPromise;
+}
+
+declare module '@jhb.software/payload-cloudinary-plugin' {
+  export function payloadCloudinaryPlugin(args: any): any;
 }

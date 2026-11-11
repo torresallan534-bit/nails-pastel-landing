@@ -1,5 +1,6 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { payloadCloudinaryPlugin } from '@jhb.software/payload-cloudinary-plugin'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -38,6 +39,31 @@ export default buildConfig({
     PoliciesContent,
     SiteSettings,
     FooterContent,
+  ],
+  plugins: [
+    payloadCloudinaryPlugin({
+      cloudName:
+        process.env.CLOUDINARY_CLOUD_NAME ||
+        process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ||
+        process.env.CLOUDINARY_NAME ||
+        '',
+      credentials: {
+        apiKey: process.env.CLOUDINARY_API_KEY || '',
+        apiSecret: process.env.CLOUDINARY_API_SECRET || '',
+      },
+      collections: {
+        media: true,
+        gallery: true,
+      },
+      folder: 'nails-pastel-media',
+      enabled: Boolean(
+        (process.env.CLOUDINARY_CLOUD_NAME ||
+          process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ||
+          process.env.CLOUDINARY_NAME) &&
+          process.env.CLOUDINARY_API_KEY &&
+          process.env.CLOUDINARY_API_SECRET
+      ),
+    }),
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'nails-pastel-master-secret-key-32ch',
