@@ -36,6 +36,13 @@ export const SectionsContent: GlobalConfig = {
               defaultValue:
                 'Cada servicio incluye manicura combinada rusa de alta precisión. Selecciona tus adicionales y mira el precio final en tiempo real.',
             },
+            {
+              name: 'servicesImportantNotice',
+              type: 'textarea',
+              label: 'Aviso Importante sobre Precios Base',
+              defaultValue:
+                'Estos son los precios base de los servicios, el precio total varía según las decoraciones, efectos adicionales.',
+            },
           ],
         },
         {

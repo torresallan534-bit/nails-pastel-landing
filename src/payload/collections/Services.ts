@@ -9,6 +9,9 @@ export const Services: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
   },
   fields: [
     {
@@ -29,17 +32,14 @@ export const Services: CollectionConfig = {
     },
     {
       name: 'category',
-      type: 'select',
+      type: 'text',
       required: true,
       label: 'Categoría',
-      options: [
-        { label: 'Semipermanente', value: 'Semipermanente' },
-        { label: 'Acrílicas / Esculpidas', value: 'Acrílicas / Esculpidas' },
-        { label: 'Nail Art & Diseño', value: 'Nail Art' },
-        { label: 'Cuidado Natural', value: 'Cuidado Natural' },
-        { label: 'Mantenimiento & Retiro', value: 'Mantenimiento' },
-      ],
       defaultValue: 'Semipermanente',
+      admin: {
+        placeholder: 'Ej: Semipermanente, Acrílicas / Esculpidas, Nail Art, Cuidado Natural, Mantenimiento...',
+        description: 'Nombre de la categoría (debe coincidir con tus Categorías para agrupar en el menú).',
+      },
     },
     {
       name: 'price',

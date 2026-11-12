@@ -10,11 +10,12 @@ import {
   ChevronUp,
   Tag,
 } from 'lucide-react';
-import { ServiceItem, SectionsContentData, SiteConfig } from '@/types';
+import { ServiceItem, CategoryItem, SectionsContentData, SiteConfig } from '@/types';
 import { defaultSectionsContent, siteConfig as defaultSiteConfig } from '@/data/initialData';
 
 interface ServicesMenuProps {
   services: ServiceItem[];
+  categories?: CategoryItem[];
   sections?: SectionsContentData;
   siteSettings?: SiteConfig;
   onSelectService: (serviceId: string) => void;
@@ -22,6 +23,7 @@ interface ServicesMenuProps {
 
 export default function ServicesMenu({
   services,
+  categories: customCategories,
   sections = defaultSectionsContent,
   siteSettings = defaultSiteConfig,
   onSelectService,
@@ -30,11 +32,21 @@ export default function ServicesMenu({
   const [activeVariants, setActiveVariants] = useState<Record<string, string[]>>({});
   const [expandedDescriptions, setExpandedDescriptions] = useState<Record<string, boolean>>({});
 
-  // Dynamically extract categories from available services
+  // Dynamically extract categories from CMS collection or fallback to services
   const categories = useMemo(() => {
+    if (customCategories && customCategories.length > 0) {
+      const sorted = [...customCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
+      const list = sorted.map((c) => c.name);
+      services.forEach((s) => {
+        if (s.category && !list.includes(s.category)) {
+          list.push(s.category);
+        }
+      });
+      return ['Todas', ...list];
+    }
     const rawCategories = Array.from(new Set(services.map((s) => s.category)));
     return ['Todas', ...rawCategories];
-  }, [services]);
+  }, [services, customCategories]);
 
   const filteredServices = services.filter((s) => {
     if (selectedCategory === 'Todas') return true;
@@ -78,7 +90,7 @@ export default function ServicesMenu({
   return (
     <section id="servicios" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full overflow-hidden">
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+      <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
         <span className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold tracking-wider uppercase bg-pastel-pink/35 text-brand-dark border border-pastel-pink/70 mb-3 sm:mb-4">
           <Tag className="w-3.5 h-3.5 text-brand-dark" />
           {sections.servicesBadge || 'Menú de Servicios & Precios Claros'}
@@ -89,6 +101,18 @@ export default function ServicesMenu({
         <p className="mt-2.5 sm:mt-3 text-sm sm:text-base md:text-lg text-brand-muted">
           {sections.servicesSubtitle ||
             'Cada servicio incluye manicura combinada rusa de alta precisión. Selecciona tus adicionales y mira el precio final en tiempo real.'}
+        </p>
+      </div>
+
+      {/* Important Notice Banner (Editable from Payload CMS) */}
+      <div className="max-w-3xl mx-auto mb-6 sm:mb-8 bg-pastel-pink/20 border border-pastel-pink/70 rounded-2xl p-3.5 sm:p-4 flex items-center gap-3 text-brand-dark shadow-xs">
+        <div className="w-8 h-8 rounded-full bg-pastel-pink flex items-center justify-center shrink-0 text-brand-dark">
+          <Sparkles className="w-4 h-4" />
+        </div>
+        <p className="text-xs sm:text-sm font-medium leading-relaxed">
+          <strong className="font-bold text-brand-dark">Aviso importante: </strong>
+          {sections.servicesImportantNotice ||
+            'Estos son los precios base de los servicios, el precio total varía según las decoraciones, efectos adicionales.'}
         </p>
       </div>
 

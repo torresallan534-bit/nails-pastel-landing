@@ -13,10 +13,12 @@ import {
   ThemeBrandingData,
   HeroContentData,
   SectionsContentData,
+  BookingContentData,
   PoliciesContentData,
   SiteConfig,
   FooterContentData,
   ServiceItem,
+  CategoryItem,
   GalleryItem,
 } from '@/types';
 
@@ -24,10 +26,12 @@ interface LandingViewProps {
   theme: ThemeBrandingData;
   hero: HeroContentData;
   sections: SectionsContentData;
+  bookingContent: BookingContentData;
   policies: PoliciesContentData;
   siteSettings: SiteConfig;
   footer: FooterContentData;
   services: ServiceItem[];
+  categories?: CategoryItem[];
   gallery: GalleryItem[];
 }
 
@@ -35,10 +39,12 @@ export default function LandingView({
   theme,
   hero,
   sections,
+  bookingContent,
   policies,
   siteSettings,
   footer,
   services,
+  categories,
   gallery,
 }: LandingViewProps) {
   const [selectedServiceId, setSelectedServiceId] = useState<string>(
@@ -65,9 +71,10 @@ export default function LandingView({
         {/* 2. Cabecera Hero 100% editable */}
         <Hero hero={hero} theme={theme} siteSettings={siteSettings} />
 
-        {/* 3. Menú de Servicios dinámico desde Colección Services */}
+        {/* 3. Menú de Servicios dinámico desde Colección Services y Categories */}
         <ServicesMenu
           services={services}
+          categories={categories}
           sections={sections}
           siteSettings={siteSettings}
           onSelectService={(serviceId) => setSelectedServiceId(serviceId)}
@@ -76,12 +83,13 @@ export default function LandingView({
         {/* 4. Galería Bento estilo Instagram desde Colección Gallery */}
         <BentoGallery items={gallery} sections={sections} />
 
-        {/* 5. Selector y Agendador de Citas (Google Calendar + WhatsApp) */}
+        {/* 5. Selector y Agendador de Citas (Google Calendar + WhatsApp) 100% editable */}
         <BookingCalendar
           services={services}
           selectedServiceId={selectedServiceId}
           onServiceChange={(id) => setSelectedServiceId(id)}
           sections={sections}
+          bookingContent={bookingContent}
           siteSettings={siteSettings}
         />
 

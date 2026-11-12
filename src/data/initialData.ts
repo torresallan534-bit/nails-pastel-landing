@@ -1,10 +1,12 @@
 import {
   ServiceItem,
+  CategoryItem,
   GalleryItem,
   SiteConfig,
   ThemeBrandingData,
   HeroContentData,
   SectionsContentData,
+  BookingContentData,
   PoliciesContentData,
   FooterContentData,
 } from '@/types';
@@ -57,6 +59,8 @@ export const defaultSectionsContent: SectionsContentData = {
   servicesTitle: 'Tarifas Transparentes & Adicionales',
   servicesSubtitle:
     'Cada servicio incluye manicura combinada rusa de alta precisión. Selecciona tus adicionales y mira el precio final en tiempo real.',
+  servicesImportantNotice:
+    'Estos son los precios base de los servicios, el precio total varía según las decoraciones, efectos adicionales.',
   galleryBadge: 'Portafolio Real & Inspiración',
   galleryTitle: 'Galería de Creaciones',
   gallerySubtitle:
@@ -68,6 +72,49 @@ export const defaultSectionsContent: SectionsContentData = {
   bookingSubtitle:
     'Selecciona tu servicio, el día y tu hora disponible. Nuestro sistema bloquea el turno y te genera el enlace de WhatsApp con el valor del anticipo.',
 };
+
+export const defaultBookingContent: BookingContentData = {
+  badge: 'Agenda Inteligente & Turnos de 2 Horas',
+  title: 'Reserva tu Turno en Línea',
+  subtitle:
+    'Elige la modalidad que prefieras: el agendador guiado con comprobante directo a WhatsApp o la página de citas nativa de Google Calendar.',
+  modeInteractiveText: 'Agendador Guiado + WhatsApp',
+  modeGoogleCalendarText: 'Google Calendar Oficial',
+  step1Badge: 'Paso 1',
+  step1Title: 'Elige tu servicio de uñas',
+  step1DurationLabel: 'Duración: 2 Horas',
+  step1VariantsTitle: '¿Deseas agregar algún adicional?',
+  step2Badge: 'Paso 2',
+  step2Title: 'Selecciona el día de tu cita',
+  step2DaysLabel: 'Lunes a Sábado',
+  step2SundayNotice: '* Los domingos el estudio permanece cerrado por mantenimiento y descanso.',
+  step3Badge: 'Paso 3',
+  step3Title: 'Selecciona tu franja horaria',
+  step3BufferLabel: 'Bloques de 2h + 10m buffer',
+  step3LunchLabel: 'Almuerzo',
+  step3SafetyNotice: 'Cada turno incluye sanitización previa y atención exclusiva sin interrupciones.',
+  summaryTitle: 'Resumen de tu Turno',
+  summarySubtitle: 'Completa tus datos para pre-agendar y generar tu comprobante de WhatsApp.',
+  nameLabel: 'Tu Nombre y Apellido *',
+  namePlaceholder: 'Ej: Laura Sofía Martínez',
+  phoneLabel: 'Número de WhatsApp *',
+  phonePlaceholder: 'Ej: 305 282 9795',
+  repairTitle: '¿Necesitas reparación de uña?',
+  repairSubtitle: 'Arreglo de uña partida o fisurada',
+  repairPrice: 8000,
+  removalTitle: '¿Traes esmalte o sistema previo para retiro?',
+  removalSubtitle: 'Retiro cuidadoso de semipermanente o acrílico previo',
+  removalPrice: 15000,
+  submitButtonText: 'Confirmar cita por WhatsApp',
+};
+
+export const defaultCategories: CategoryItem[] = [
+  { id: 'cat-1', name: 'Semipermanente', slug: 'semipermanente', order: 1 },
+  { id: 'cat-2', name: 'Acrílicas / Esculpidas', slug: 'acrilicas-esculpidas', order: 2 },
+  { id: 'cat-3', name: 'Nail Art', slug: 'nail-art', order: 3 },
+  { id: 'cat-4', name: 'Cuidado Natural', slug: 'cuidado-natural', order: 4 },
+  { id: 'cat-5', name: 'Mantenimiento', slug: 'mantenimiento', order: 5 },
+];
 
 export const defaultPoliciesContent: PoliciesContentData = {
   badge: 'Transparencia & Compromiso Mutuo',

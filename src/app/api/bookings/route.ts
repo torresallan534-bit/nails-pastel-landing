@@ -23,6 +23,8 @@ export async function POST(req: NextRequest) {
         name: client.name.trim(),
         phone: client.phone.trim(),
         notes: client.notes?.trim() || '',
+        needsRepair: Boolean(client.needsRepair),
+        needsRemoval: Boolean(client.needsRemoval),
       },
       service: {
         id: service.id,
@@ -34,6 +36,8 @@ export async function POST(req: NextRequest) {
         depositRequired: 15000,
         remainingBalance: Math.max(0, (Number(service.totalEstimatedPrice) || Number(service.basePrice) || 0) - 15000),
         durationMinutes: Number(service.durationMinutes) || 120,
+        repairPrice: Number(service.repairPrice) || 0,
+        removalPrice: Number(service.removalPrice) || 0,
       },
       appointment: {
         date: appointment.date,

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { Users } from './src/payload/collections/Users'
+import { Categories } from './src/payload/collections/Categories'
 import { Media } from './src/payload/collections/Media'
 import { Services } from './src/payload/collections/Services'
 import { Gallery } from './src/payload/collections/Gallery'
@@ -14,6 +15,7 @@ import { Gallery } from './src/payload/collections/Gallery'
 import { ThemeBranding } from './src/payload/globals/ThemeBranding'
 import { HeroContent } from './src/payload/globals/HeroContent'
 import { SectionsContent } from './src/payload/globals/SectionsContent'
+import { BookingContent } from './src/payload/globals/BookingContent'
 import { PoliciesContent } from './src/payload/globals/PoliciesContent'
 import { SiteSettings } from './src/payload/globals/SiteSettings'
 import { FooterContent } from './src/payload/globals/FooterContent'
@@ -31,11 +33,12 @@ export default buildConfig({
       titleSuffix: '- Centro de Control | Nails Pastel Studio',
     },
   },
-  collections: [Users, Services, Gallery, Media],
+  collections: [Users, Categories, Services, Gallery, Media],
   globals: [
     ThemeBranding,
     HeroContent,
     SectionsContent,
+    BookingContent,
     PoliciesContent,
     SiteSettings,
     FooterContent,

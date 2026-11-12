@@ -16,14 +16,26 @@ import {
   CalendarCheck2,
   Smartphone,
 } from 'lucide-react';
-import { ServiceItem, TimeSlot, ServiceVariant, SectionsContentData, SiteConfig } from '@/types';
-import { defaultSectionsContent, siteConfig as defaultSiteConfig } from '@/data/initialData';
+import {
+  ServiceItem,
+  TimeSlot,
+  ServiceVariant,
+  SectionsContentData,
+  BookingContentData,
+  SiteConfig,
+} from '@/types';
+import {
+  defaultSectionsContent,
+  defaultBookingContent,
+  siteConfig as defaultSiteConfig,
+} from '@/data/initialData';
 
 interface BookingCalendarProps {
   services: ServiceItem[];
   selectedServiceId?: string;
   onServiceChange?: (serviceId: string) => void;
   sections?: SectionsContentData;
+  bookingContent?: BookingContentData;
   siteSettings?: SiteConfig;
 }
 
@@ -32,6 +44,7 @@ export default function BookingCalendar({
   selectedServiceId,
   onServiceChange,
   sections = defaultSectionsContent,
+  bookingContent = defaultBookingContent,
   siteSettings = defaultSiteConfig,
 }: BookingCalendarProps) {
   // Booking Mode: 'interactive' (con anticipo & WhatsApp) or 'google-calendar' (página nativa Google)
@@ -142,7 +155,8 @@ export default function BookingCalendar({
   // Client info form
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
-  const [notes, setNotes] = useState('');
+  const [needsRepair, setNeedsRepair] = useState(false);
+  const [needsRemoval, setNeedsRemoval] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [copiedAccount, setCopiedAccount] = useState(false);
@@ -155,6 +169,14 @@ export default function BookingCalendar({
   };
 
   // Pricing calculations
+  const repairPrice =
+    typeof bookingContent?.repairPrice === 'number' ? bookingContent.repairPrice : 8000;
+  const removalPrice =
+    typeof bookingContent?.removalPrice === 'number' ? bookingContent.removalPrice : 15000;
+
+  const repairCost = needsRepair ? repairPrice : 0;
+  const removalCost = needsRemoval ? removalPrice : 0;
+
   const totalVariantsPrice = useMemo(() => {
     if (!activeService?.variants) return 0;
     return activeService.variants
@@ -162,7 +184,7 @@ export default function BookingCalendar({
       .reduce((sum, v) => sum + v.extraPrice, 0);
   }, [activeService, selectedVariants]);
 
-  const totalPrice = (activeService?.price || 0) + totalVariantsPrice;
+  const totalPrice = (activeService?.price || 0) + totalVariantsPrice + repairCost + removalCost;
   const depositAmount = siteSettings.depositAmount;
   const remainingBalance = Math.max(0, totalPrice - depositAmount);
 
@@ -205,8 +227,10 @@ export default function BookingCalendar({
       selectedVariantsObjects.length > 0
         ? ` (Adicionales: ${selectedVariantsObjects.map((v) => v.name).join(', ')})`
         : '';
+    const repairText = needsRepair ? ` | Reparación de uña (+${formatCOP(repairPrice)})` : '';
+    const removalText = needsRemoval ? ` | Retiro de sistema previo (+${formatCOP(removalPrice)})` : '';
 
-    const message = `¡Hola Nails Pastel! Quiero agendar mi cita de ${serviceName}${variantsText} para el ${dateStr} a las ${timeStr}. Mi nombre es ${nameStr}. Mi número es ${clientPhone.trim()}. Voy a transferir el anticipo de $15.000 COP a Nequi/Daviplata.${notes.trim() ? ` Notas: ${notes.trim()}.` : ''}`;
+    const message = `¡Hola Nails Pastel! Quiero agendar mi cita de ${serviceName}${variantsText}${repairText}${removalText} para el ${dateStr} a las ${timeStr}. Mi nombre es ${nameStr}. Mi número es ${clientPhone.trim()}. Valor total estimado: ${formatCOP(totalPrice)}. Voy a transferir el anticipo de $15.000 COP a Nequi/Daviplata.`;
 
     return `https://wa.me/${rawPhone}?text=${encodeURIComponent(message)}`;
   };
@@ -247,7 +271,8 @@ export default function BookingCalendar({
           client: {
             name: clientName,
             phone: clientPhone,
-            notes,
+            needsRepair,
+            needsRemoval,
           },
           service: {
             id: activeService.id,
@@ -260,6 +285,8 @@ export default function BookingCalendar({
             })),
             totalEstimatedPrice: totalPrice,
             durationMinutes: activeService.durationMinutes,
+            repairPrice: repairCost,
+            removalPrice: removalCost,
           },
           appointment: {
             date: selectedDate,
@@ -292,13 +319,14 @@ export default function BookingCalendar({
       <div className="text-center max-w-3xl mx-auto mb-10">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-pastel-purple/50 text-brand-dark border border-pastel-purple/80 mb-4">
           <Sparkles className="w-3.5 h-3.5 text-brand-dark" />
-          {sections.bookingBadge || 'Agenda Inteligente & Turnos de 2 Horas'}
+          {bookingContent.badge || sections.bookingBadge || 'Agenda Inteligente & Turnos de 2 Horas'}
         </span>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-dark">
-          {sections.bookingTitle || 'Reserva tu Turno en Línea'}
+          {bookingContent.title || sections.bookingTitle || 'Reserva tu Turno en Línea'}
         </h2>
         <p className="mt-3 text-base sm:text-lg text-brand-muted">
-          {sections.bookingSubtitle ||
+          {bookingContent.subtitle ||
+            sections.bookingSubtitle ||
             `Elige la modalidad que prefieras: el agendador guiado con comprobante directo a WhatsApp o la página de citas nativa de Google Calendar vinculada a ${siteSettings.notificationEmail}.`}
         </p>
 
@@ -314,7 +342,7 @@ export default function BookingCalendar({
             }`}
           >
             <Sparkles className="w-4 h-4 text-pastel-pink shrink-0" />
-            <span>Agendador Guiado + WhatsApp</span>
+            <span>{bookingContent.modeInteractiveText || 'Agendador Guiado + WhatsApp'}</span>
           </button>
 
           <button
@@ -327,7 +355,7 @@ export default function BookingCalendar({
             }`}
           >
             <CalendarCheck2 className="w-4 h-4 text-pastel-pink shrink-0" />
-            <span>Google Calendar Oficial</span>
+            <span>{bookingContent.modeGoogleCalendarText || 'Google Calendar Oficial'}</span>
           </button>
         </div>
       </div>
@@ -341,12 +369,14 @@ export default function BookingCalendar({
             <div className="bg-white/85 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-card border border-canvas-border">
               <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <span className="text-xs font-bold uppercase tracking-wider text-pastel-pinkDark flex items-center gap-1.5">
-                  Paso 1
+                  {bookingContent.step1Badge || 'Paso 1'}
                 </span>
-                <span className="text-xs text-brand-muted">Duración: 2 Horas</span>
+                <span className="text-xs text-brand-muted">
+                  {bookingContent.step1DurationLabel || 'Duración: 2 Horas'}
+                </span>
               </div>
               <h3 className="text-xl font-bold text-brand-dark mb-4">
-                Elige tu servicio de uñas
+                {bookingContent.step1Title || 'Elige tu servicio de uñas'}
               </h3>
 
               {/* Service selector pills */}
@@ -398,7 +428,7 @@ export default function BookingCalendar({
                   {activeService.variants && activeService.variants.length > 0 && (
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-wider text-brand-dark mb-2">
-                        ¿Deseas agregar algún adicional?
+                        {bookingContent.step1VariantsTitle || '¿Deseas agregar algún adicional?'}
                       </h4>
                       <div className="space-y-2">
                         {activeService.variants.map((v) => {
@@ -438,13 +468,15 @@ export default function BookingCalendar({
             <div className="bg-white/85 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-card border border-canvas-border">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-pastel-pinkDark">
-                  Paso 2
+                  {bookingContent.step2Badge || 'Paso 2'}
                 </span>
-                <span className="text-xs text-brand-muted">Lunes a Sábado</span>
+                <span className="text-xs text-brand-muted">
+                  {bookingContent.step2DaysLabel || 'Lunes a Sábado'}
+                </span>
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-brand-dark mb-3 sm:mb-4 flex items-center gap-2">
                 <CalendarIcon className="w-5 h-5 text-brand-dark" />
-                Selecciona el día de tu cita
+                {bookingContent.step2Title || 'Selecciona el día de tu cita'}
               </h3>
 
               {/* Horizontal scroll of days (touch-friendly >= 48px) */}
@@ -479,7 +511,8 @@ export default function BookingCalendar({
                 })}
               </div>
               <p className="text-[11px] text-brand-muted mt-2 italic">
-                * Los domingos el estudio permanece cerrado por mantenimiento y descanso.
+                {bookingContent.step2SundayNotice ||
+                  '* Los domingos el estudio permanece cerrado por mantenimiento y descanso.'}
               </p>
             </div>
 
@@ -487,13 +520,15 @@ export default function BookingCalendar({
             <div className="bg-white/85 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-card border border-canvas-border">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-pastel-pinkDark">
-                  Paso 3
+                  {bookingContent.step3Badge || 'Paso 3'}
                 </span>
-                <span className="text-xs text-brand-muted">Bloques de 2h + 10m buffer</span>
+                <span className="text-xs text-brand-muted">
+                  {bookingContent.step3BufferLabel || 'Bloques de 2h + 10m buffer'}
+                </span>
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-brand-dark mb-3 sm:mb-4 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-brand-dark" />
-                Selecciona tu franja horaria
+                {bookingContent.step3Title || 'Selecciona tu franja horaria'}
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -512,7 +547,7 @@ export default function BookingCalendar({
                           <span className="font-medium line-through">{slot.displayTime}</span>
                         </div>
                         <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">
-                          Almuerzo
+                          {bookingContent.step3LunchLabel || 'Almuerzo'}
                         </span>
                       </div>
                     );
@@ -550,7 +585,8 @@ export default function BookingCalendar({
               <div className="mt-4 flex items-center gap-2 text-xs text-brand-muted bg-canvas/70 p-3 rounded-xl">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>
-                  Cada turno incluye sanitización previa y atención exclusiva sin interrupciones.
+                  {bookingContent.step3SafetyNotice ||
+                    'Cada turno incluye sanitización previa y atención exclusiva sin interrupciones.'}
                 </span>
               </div>
             </div>
@@ -564,10 +600,11 @@ export default function BookingCalendar({
             >
               <div className="border-b border-canvas-border pb-4 sm:pb-5 mb-4 sm:mb-5">
                 <h3 className="text-xl sm:text-2xl font-extrabold text-brand-dark tracking-tight">
-                  Resumen de tu Turno
+                  {bookingContent.summaryTitle || 'Resumen de tu Turno'}
                 </h3>
                 <p className="text-xs text-brand-muted mt-1">
-                  Completa tus datos para pre-agendar y generar tu comprobante de WhatsApp.
+                  {bookingContent.summarySubtitle ||
+                    'Completa tus datos para pre-agendar y generar tu comprobante de WhatsApp.'}
                 </p>
               </div>
 
@@ -575,43 +612,110 @@ export default function BookingCalendar({
               <div className="space-y-3.5 sm:space-y-4 mb-5 sm:mb-6">
                 <div>
                   <label className="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-1.5">
-                    Tu Nombre y Apellido *
+                    {bookingContent.nameLabel || 'Tu Nombre y Apellido *'}
                   </label>
                   <input
                     type="text"
                     required
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
-                    placeholder="Ej: Laura Sofía Martínez"
+                    placeholder={bookingContent.namePlaceholder || 'Ej: Laura Sofía Martínez'}
                     className="w-full h-12 px-4 rounded-xl border border-canvas-border bg-canvas/40 text-brand-dark placeholder-brand-muted/60 text-base focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:border-brand-dark transition-all"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-1.5">
-                    Número de WhatsApp *
+                    {bookingContent.phoneLabel || 'Número de WhatsApp *'}
                   </label>
                   <input
                     type="tel"
                     required
                     value={clientPhone}
                     onChange={(e) => setClientPhone(e.target.value)}
-                    placeholder="Ej: 305 282 9795"
+                    placeholder={bookingContent.phonePlaceholder || 'Ej: 305 282 9795'}
                     className="w-full h-12 px-4 rounded-xl border border-canvas-border bg-canvas/40 text-brand-dark placeholder-brand-muted/60 text-base focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:border-brand-dark transition-all"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-1.5">
-                    Notas / ¿Traes uñas para retiro o referencia?
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Ej: Traigo semipermanente de otro salón para retirar / Tengo una foto de Pinterest..."
-                    className="w-full p-3 rounded-xl border border-canvas-border bg-canvas/40 text-brand-dark placeholder-brand-muted/60 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:border-brand-dark transition-all resize-none"
-                  />
+                {/* Reparaciones & Retiros interactive buttons (replaces old notes textarea) */}
+                <div className="space-y-2 pt-1">
+                  <span className="block text-[11px] font-bold text-brand-dark uppercase tracking-wider">
+                    Servicios adicionales rápidos:
+                  </span>
+
+                  {/* Botón Reparaciones */}
+                  <button
+                    type="button"
+                    onClick={() => setNeedsRepair((prev) => !prev)}
+                    className={`w-full min-h-[52px] p-3 rounded-xl border text-left flex items-center justify-between transition-all duration-200 active:scale-[0.99] ${
+                      needsRepair
+                        ? 'bg-pastel-cream border-brand-dark shadow-xs ring-2 ring-brand-dark/10'
+                        : 'bg-canvas/40 border-canvas-border hover:bg-canvas/80 text-brand-muted hover:text-brand-dark'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                      <div
+                        className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-colors ${
+                          needsRepair ? 'bg-brand-dark text-white' : 'border border-gray-400 bg-white'
+                        }`}
+                      >
+                        {needsRepair && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-brand-dark leading-tight truncate">
+                          {bookingContent.repairTitle || '¿Necesitas reparación de uña?'}
+                        </p>
+                        <p className="text-[11px] text-brand-muted leading-tight truncate">
+                          {bookingContent.repairSubtitle || 'Arreglo de uña partida o fisurada'}
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      className={`text-xs font-extrabold shrink-0 px-2 py-0.5 rounded-lg ${
+                        needsRepair ? 'bg-pastel-pink text-brand-dark' : 'bg-canvas text-brand-dark'
+                      }`}
+                    >
+                      +{formatCOP(repairPrice)}
+                    </span>
+                  </button>
+
+                  {/* Botón Retiros */}
+                  <button
+                    type="button"
+                    onClick={() => setNeedsRemoval((prev) => !prev)}
+                    className={`w-full min-h-[52px] p-3 rounded-xl border text-left flex items-center justify-between transition-all duration-200 active:scale-[0.99] ${
+                      needsRemoval
+                        ? 'bg-pastel-cream border-brand-dark shadow-xs ring-2 ring-brand-dark/10'
+                        : 'bg-canvas/40 border-canvas-border hover:bg-canvas/80 text-brand-muted hover:text-brand-dark'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                      <div
+                        className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-colors ${
+                          needsRemoval ? 'bg-brand-dark text-white' : 'border border-gray-400 bg-white'
+                        }`}
+                      >
+                        {needsRemoval && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-brand-dark leading-tight truncate">
+                          {bookingContent.removalTitle || '¿Traes esmalte o sistema previo para retiro?'}
+                        </p>
+                        <p className="text-[11px] text-brand-muted leading-tight truncate">
+                          {bookingContent.removalSubtitle ||
+                            'Retiro cuidadoso de semipermanente o acrílico previo'}
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      className={`text-xs font-extrabold shrink-0 px-2 py-0.5 rounded-lg ${
+                        needsRemoval ? 'bg-pastel-pink text-brand-dark' : 'bg-canvas text-brand-dark'
+                      }`}
+                    >
+                      +{formatCOP(removalPrice)}
+                    </span>
+                  </button>
                 </div>
               </div>
 
@@ -631,6 +735,20 @@ export default function BookingCalendar({
                         <span>+{formatCOP(v.extraPrice)}</span>
                       </div>
                     ))}
+                  </div>
+                )}
+
+                {needsRepair && (
+                  <div className="flex justify-between items-center text-xs text-brand-dark pt-1.5 border-t border-canvas-border/50">
+                    <span className="font-medium text-brand-muted">• Reparación de uña:</span>
+                    <span className="font-bold">+{formatCOP(repairPrice)}</span>
+                  </div>
+                )}
+
+                {needsRemoval && (
+                  <div className="flex justify-between items-center text-xs text-brand-dark pt-1.5 border-t border-canvas-border/50">
+                    <span className="font-medium text-brand-muted">• Retiro de sistema previo:</span>
+                    <span className="font-bold">+{formatCOP(removalPrice)}</span>
                   </div>
                 )}
 
@@ -720,7 +838,7 @@ export default function BookingCalendar({
                 ) : (
                   <>
                     <Send className="w-5 h-5 text-brand-dark" />
-                    <span>Confirmar cita por WhatsApp</span>
+                    <span>{bookingContent.submitButtonText || 'Confirmar cita por WhatsApp'}</span>
                   </>
                 )}
               </button>

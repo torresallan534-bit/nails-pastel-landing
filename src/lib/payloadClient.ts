@@ -2,21 +2,25 @@ import {
   ThemeBrandingData,
   HeroContentData,
   SectionsContentData,
+  BookingContentData,
   PoliciesContentData,
   SiteConfig,
   FooterContentData,
   ServiceItem,
   GalleryItem,
+  CategoryItem,
 } from '../types';
 import {
   defaultThemeBranding,
   defaultHeroContent,
   defaultSectionsContent,
+  defaultBookingContent,
   defaultPoliciesContent,
   defaultFooterContent,
   siteConfig,
   initialServices,
   initialGallery,
+  defaultCategories,
 } from '../data/initialData';
 
 async function getPayloadInstance() {
@@ -102,6 +106,8 @@ export async function getSectionsContent(): Promise<SectionsContentData> {
       servicesBadge: data.servicesBadge || defaultSectionsContent.servicesBadge,
       servicesTitle: data.servicesTitle || defaultSectionsContent.servicesTitle,
       servicesSubtitle: data.servicesSubtitle || defaultSectionsContent.servicesSubtitle,
+      servicesImportantNotice:
+        data.servicesImportantNotice || defaultSectionsContent.servicesImportantNotice,
       galleryBadge: data.galleryBadge || defaultSectionsContent.galleryBadge,
       galleryTitle: data.galleryTitle || defaultSectionsContent.galleryTitle,
       gallerySubtitle: data.gallerySubtitle || defaultSectionsContent.gallerySubtitle,
@@ -114,6 +120,69 @@ export async function getSectionsContent(): Promise<SectionsContentData> {
     };
   } catch (e) {
     return defaultSectionsContent;
+  }
+}
+
+export async function getBookingContent(): Promise<BookingContentData> {
+  const payload = await getPayloadInstance();
+  if (!payload) return defaultBookingContent;
+
+  try {
+    const data = await payload.findGlobal({ slug: 'booking-content' });
+    if (!data) return defaultBookingContent;
+
+    return {
+      badge: data.badge || defaultBookingContent.badge,
+      title: data.title || defaultBookingContent.title,
+      subtitle: data.subtitle || defaultBookingContent.subtitle,
+      modeInteractiveText:
+        data.modeInteractiveText || defaultBookingContent.modeInteractiveText,
+      modeGoogleCalendarText:
+        data.modeGoogleCalendarText || defaultBookingContent.modeGoogleCalendarText,
+      step1Badge: data.step1Badge || defaultBookingContent.step1Badge,
+      step1Title: data.step1Title || defaultBookingContent.step1Title,
+      step1DurationLabel:
+        data.step1DurationLabel || defaultBookingContent.step1DurationLabel,
+      step1VariantsTitle:
+        data.step1VariantsTitle || defaultBookingContent.step1VariantsTitle,
+      step2Badge: data.step2Badge || defaultBookingContent.step2Badge,
+      step2Title: data.step2Title || defaultBookingContent.step2Title,
+      step2DaysLabel: data.step2DaysLabel || defaultBookingContent.step2DaysLabel,
+      step2SundayNotice:
+        data.step2SundayNotice || defaultBookingContent.step2SundayNotice,
+      step3Badge: data.step3Badge || defaultBookingContent.step3Badge,
+      step3Title: data.step3Title || defaultBookingContent.step3Title,
+      step3BufferLabel:
+        data.step3BufferLabel || defaultBookingContent.step3BufferLabel,
+      step3LunchLabel: data.step3LunchLabel || defaultBookingContent.step3LunchLabel,
+      step3SafetyNotice:
+        data.step3SafetyNotice || defaultBookingContent.step3SafetyNotice,
+      summaryTitle: data.summaryTitle || defaultBookingContent.summaryTitle,
+      summarySubtitle: data.summarySubtitle || defaultBookingContent.summarySubtitle,
+      nameLabel: data.nameLabel || defaultBookingContent.nameLabel,
+      namePlaceholder:
+        data.namePlaceholder || defaultBookingContent.namePlaceholder,
+      phoneLabel: data.phoneLabel || defaultBookingContent.phoneLabel,
+      phonePlaceholder:
+        data.phonePlaceholder || defaultBookingContent.phonePlaceholder,
+      repairTitle: data.repairTitle || defaultBookingContent.repairTitle,
+      repairSubtitle: data.repairSubtitle || defaultBookingContent.repairSubtitle,
+      repairPrice:
+        typeof data.repairPrice === 'number'
+          ? data.repairPrice
+          : defaultBookingContent.repairPrice,
+      removalTitle: data.removalTitle || defaultBookingContent.removalTitle,
+      removalSubtitle:
+        data.removalSubtitle || defaultBookingContent.removalSubtitle,
+      removalPrice:
+        typeof data.removalPrice === 'number'
+          ? data.removalPrice
+          : defaultBookingContent.removalPrice,
+      submitButtonText:
+        data.submitButtonText || defaultBookingContent.submitButtonText,
+    };
+  } catch (e) {
+    return defaultBookingContent;
   }
 }
 
@@ -299,5 +368,30 @@ export async function getGallery(): Promise<GalleryItem[]> {
     });
   } catch (e) {
     return initialGallery;
+  }
+}
+
+export async function getCategories(): Promise<CategoryItem[]> {
+  const payload = await getPayloadInstance();
+  if (!payload) return defaultCategories;
+
+  try {
+    const result = await payload.find({
+      collection: 'categories',
+      limit: 100,
+      sort: 'order',
+    });
+
+    if (!result.docs || result.docs.length === 0) return defaultCategories;
+
+    return result.docs.map((doc: any, idx: number) => ({
+      id: doc.id,
+      name: doc.name,
+      slug: doc.slug || doc.name.toLowerCase().replace(/\s+/g, '-'),
+      order: typeof doc.order === 'number' ? doc.order : idx + 1,
+      description: doc.description || '',
+    }));
+  } catch (e) {
+    return defaultCategories;
   }
 }

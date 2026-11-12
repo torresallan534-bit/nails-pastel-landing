@@ -5,11 +5,19 @@ export interface ServiceVariant {
   extraMinutes?: number;
 }
 
+export interface CategoryItem {
+  id: string;
+  name: string;
+  slug: string;
+  order: number;
+  description?: string;
+}
+
 export interface ServiceItem {
   id: string;
   title: string;
   slug: string;
-  category: 'Semipermanente' | 'Acrílicas / Esculpidas' | 'Nail Art' | 'Cuidado Natural' | 'Mantenimiento';
+  category: string;
   price: number;
   durationMinutes: number;
   description: string;
@@ -83,6 +91,7 @@ export interface SectionsContentData {
   servicesBadge: string;
   servicesTitle: string;
   servicesSubtitle: string;
+  servicesImportantNotice: string;
   galleryBadge: string;
   galleryTitle: string;
   gallerySubtitle: string;
@@ -91,6 +100,40 @@ export interface SectionsContentData {
   bookingBadge: string;
   bookingTitle: string;
   bookingSubtitle: string;
+}
+
+export interface BookingContentData {
+  badge: string;
+  title: string;
+  subtitle: string;
+  modeInteractiveText: string;
+  modeGoogleCalendarText: string;
+  step1Badge: string;
+  step1Title: string;
+  step1DurationLabel: string;
+  step1VariantsTitle: string;
+  step2Badge: string;
+  step2Title: string;
+  step2DaysLabel: string;
+  step2SundayNotice: string;
+  step3Badge: string;
+  step3Title: string;
+  step3BufferLabel: string;
+  step3LunchLabel: string;
+  step3SafetyNotice: string;
+  summaryTitle: string;
+  summarySubtitle: string;
+  nameLabel: string;
+  namePlaceholder: string;
+  phoneLabel: string;
+  phonePlaceholder: string;
+  repairTitle: string;
+  repairSubtitle: string;
+  repairPrice: number;
+  removalTitle: string;
+  removalSubtitle: string;
+  removalPrice: number;
+  submitButtonText: string;
 }
 
 export interface PolicyCardItem {
@@ -142,7 +185,11 @@ export interface BookingFormData {
   slot: TimeSlot | null;
   clientName: string;
   clientPhone: string;
-  notes: string;
+  notes?: string;
+  needsRepair: boolean;
+  needsRemoval: boolean;
+  repairPrice: number;
+  removalPrice: number;
 }
 
 export interface BookingWebhookPayload {
@@ -153,6 +200,8 @@ export interface BookingWebhookPayload {
     name: string;
     phone: string;
     notes?: string;
+    needsRepair?: boolean;
+    needsRemoval?: boolean;
   };
   service: {
     id: string;
@@ -164,6 +213,8 @@ export interface BookingWebhookPayload {
     depositRequired: number;
     remainingBalance: number;
     durationMinutes: number;
+    repairPrice?: number;
+    removalPrice?: number;
   };
   appointment: {
     date: string;

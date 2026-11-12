@@ -4,10 +4,12 @@ import {
   getThemeBranding,
   getHeroContent,
   getSectionsContent,
+  getBookingContent,
   getPoliciesContent,
   getSiteSettings,
   getFooterContent,
   getServices,
+  getCategories,
   getGallery,
 } from '@/lib/payloadClient';
 
@@ -19,19 +21,23 @@ export default async function HomePage() {
     theme,
     hero,
     sections,
+    bookingContent,
     policies,
     siteSettings,
     footer,
     services,
+    categories,
     gallery,
   ] = await Promise.all([
     getThemeBranding(),
     getHeroContent(),
     getSectionsContent(),
+    getBookingContent(),
     getPoliciesContent(),
     getSiteSettings(),
     getFooterContent(),
     getServices(),
+    getCategories(),
     getGallery(),
   ]);
 
@@ -40,10 +46,12 @@ export default async function HomePage() {
       theme={theme}
       hero={hero}
       sections={sections}
+      bookingContent={bookingContent}
       policies={policies}
       siteSettings={siteSettings}
       footer={footer}
       services={services}
+      categories={categories}
       gallery={gallery}
     />
   );
